@@ -1,0 +1,8 @@
+name: TosoGame_by_smk7758
+main: com.github.smk7758.TosoGame_by_smk7758.Main
+version: 0.0.1
+author: smk7758
+permissions:
+commands:
+  TosoGame:
+    description: TosoGame's command.
