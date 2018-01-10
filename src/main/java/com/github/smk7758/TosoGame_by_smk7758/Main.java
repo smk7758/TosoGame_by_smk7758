@@ -1,20 +1,22 @@
 package com.github.smk7758.TosoGame_by_smk7758;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 	public static final String plugin_name = "TosoGame_by_smk7758";
 	public static boolean debug_mode = false;
 	private CommandExecuter command_executer = new CommandExecuter(this);
-	private TeamManager scorebord_manager = null;
-	private GameManager gamae_manager = new GameManager(this);
+	private TeamManager team_manager = null;
+	private GameManager game_manager = null;
 
 	@Override
 	public void onEnable() {
 		if (!Main.plugin_name.equals(getDescription().getName())) getPluginLoader().disablePlugin(this);
 		// getServer().getPluginManager().registerEvents(command_listner, this);
 		getCommand("TosoGame").setExecutor(command_executer);
-		scorebord_manager = new TeamManager();
+		saveDefaultConfig();
+		team_manager = new TeamManager();
 	}
 
 	@Override
@@ -26,10 +28,15 @@ public class Main extends JavaPlugin {
 	}
 
 	public TeamManager getTeamManager() {
-		return scorebord_manager;
+		return team_manager;
 	}
 
 	public GameManager getGameManager() {
-		return gamae_manager;
+		return game_manager;
+	}
+
+	public void startGame() {
+		game_manager = new GameManager(this);
+		Bukkit.getOnlinePlayers().forEach(player -> player.setScoreboard(team_manager.getBoard()));
 	}
 }

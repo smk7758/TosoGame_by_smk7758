@@ -1,37 +1,42 @@
 package com.github.smk7758.TosoGame_by_smk7758;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
+
 public class TeamManager {
-	public Scoreboard board = null;
-	public Map<TeamName, String> team_colors = new HashMap<>();
+	private Scoreboard board = null;
 
 	public TeamManager() {
-		board = Bukkit.getScoreboardManager().getNewScoreboard();
+		board = Bukkit.getScoreboardManager().getMainScoreboard();
 		for (TeamName name : TeamName.values()) {
-			board.registerNewTeam(name.toString());
+			// initialize teams
+			Team team = board.registerNewTeam(name.toString());
+			team.setDisplayName(name.displayname);
+			team.setPrefix(name.prefix);
 		}
-		team_colors.put(TeamName.Hunter, "%C");
-		team_colors.put(TeamName.Runner, "%A");
-		team_colors.put(TeamName.OtherPlayer, "%F");
-		team_colors.forEach((name, color) -> {
-			// getTeam(name).setColor(ChatColor.getByChar(ChatColor.translateAlternateColorCodes('%', color)));
-			getTeam(name).setPrefix(ChatColor.translateAlternateColorCodes('%', color));
-		});
 	}
 
 	public enum TeamName {
-		Hunter, Runner, OtherPlayer
+		Hunter("Hunter", "&C"), Runner("Runner", "&A"), OtherPlayer("OtherPlayer", "&F");
+
+		public String displayname, prefix;
+
+		private TeamName(String name, String prefix) {
+			this.displayname = name;
+			this.prefix = prefix;
+		}
+	}
+
+	public Scoreboard getBoard() {
+		return board;
 	}
 
 	public Team getTeam(TeamName name) {
@@ -45,7 +50,7 @@ public class TeamManager {
 	}
 
 	public void sendTeamPlayers(TeamName name, String text) {
-		getTeamPlayers(TeamName.Hunter).forEach(player -> SendLog.send(text, player));
+		getTeamPlayers(name).forEach(player -> SendLog.send(text, player));
 	}
 
 	public boolean isTeam(TeamName name, Player player) {

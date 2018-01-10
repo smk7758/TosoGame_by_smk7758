@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.github.smk7758.TosoGame_by_smk7758.TeamManager.TeamName;
+import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class CommandExecuter implements CommandExecutor {
 	public Main main = null;
@@ -44,7 +45,16 @@ public class CommandExecuter implements CommandExecutor {
 					showTeam(TeamName.OtherPlayer, sender);
 				}
 				return true;
+			} else if (args[0].equalsIgnoreCase("start")) {
+				main.startGame();
+				SendLog.send("Game has been started.", sender);
+				return true;
+			} else if (args[0].equalsIgnoreCase("stop")) {
+
 			} else if (args[0].equalsIgnoreCase("test")) {
+				main.getTeamManager().sendTeamPlayers(TeamName.valueOf(args[1]), args[2]);
+				SendLog.debug("AA", sender);
+				return true;
 			}
 		}
 		return false;
@@ -62,6 +72,6 @@ public class CommandExecuter implements CommandExecutor {
 
 	public void showTeam(TeamName name, CommandSender sender) {
 		SendLog.send("Team: " + name, sender);
-		main.getTeamManager().getTeamPlayers(name).forEach(player -> SendLog.send(player.getName(), sender));
+		// main.getTeamManager().getTeamPlayers(name).forEach(player -> SendLog.send(player.getName(), sender));
 	}
 }

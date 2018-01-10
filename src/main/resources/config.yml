@@ -1,0 +1,7 @@
+DebugMode: false
+Hunter:
+  Prefix: "&C"
+Runner:
+  Prefix: "&A"
+OtherPlayer:
+  Prefix: "&F"

@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.github.smk7758.TosoGame_by_smk7758.TeamManager.TeamName;
+import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class Listner {
 	private Main main = null;
