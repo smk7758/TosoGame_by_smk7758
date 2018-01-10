@@ -12,10 +12,11 @@ import org.bukkit.scoreboard.Team;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class TeamManager {
+	private Main main = null;
 	private Scoreboard board = null;
 
-	public TeamManager() {
-		board = Bukkit.getScoreboardManager().getMainScoreboard();
+	public TeamManager(Main main) {
+		board =	main.getBoard();
 		for (TeamName name : TeamName.values()) {
 			// initialize teams
 			Team team = board.registerNewTeam(name.toString());

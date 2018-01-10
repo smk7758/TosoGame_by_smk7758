@@ -3,15 +3,16 @@ package com.github.smk7758.TosoGame_by_smk7758;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.github.smk7758.TosoGame_by_smk7758.TeamManager.TeamName;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
-public class Listner {
+public class GameListener implements Listener {
 	private Main main = null;
 
-	public Listner(Main main) {
+	public GameListener(Main main) {
 		this.main = main;
 	}
 

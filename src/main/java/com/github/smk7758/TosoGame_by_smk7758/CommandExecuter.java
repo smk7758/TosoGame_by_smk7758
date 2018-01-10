@@ -72,6 +72,6 @@ public class CommandExecuter implements CommandExecutor {
 
 	public void showTeam(TeamName name, CommandSender sender) {
 		SendLog.send("Team: " + name, sender);
-		// main.getTeamManager().getTeamPlayers(name).forEach(player -> SendLog.send(player.getName(), sender));
+		main.getTeamManager().getTeamPlayers(name).forEach(player -> SendLog.send(player.getName(), sender));
 	}
 }
