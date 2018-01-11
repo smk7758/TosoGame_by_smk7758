@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758;
+package com.github.smk7758.TosoGame_by_smk7758.Game;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,14 +9,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
-public class TeamManager {
+public class ScorebordManager {
 	private Main main = null;
 	private Scoreboard board = null;
 
-	public TeamManager(Main main) {
-		board =	main.getBoard();
+	public ScorebordManager(Main main) {
+		board = main.getBoard();
 		for (TeamName name : TeamName.values()) {
 			// initialize teams
 			Team team = board.registerNewTeam(name.toString());
@@ -25,6 +26,7 @@ public class TeamManager {
 		}
 	}
 
+	// staticなんでいつか変更.
 	public enum TeamName {
 		Hunter("Hunter", "&C"), Runner("Runner", "&A"), OtherPlayer("OtherPlayer", "&F");
 

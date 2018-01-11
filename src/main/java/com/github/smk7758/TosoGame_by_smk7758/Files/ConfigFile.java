@@ -11,7 +11,7 @@ public class ConfigFile {
 	}
 
 	public enum ConfigFileKeys {
-		start, finish, stop, win_runner, win_hunter;
+		book_name, book_lore_texts, pages;
 	}
 
 	// リファクタリングしたい！
