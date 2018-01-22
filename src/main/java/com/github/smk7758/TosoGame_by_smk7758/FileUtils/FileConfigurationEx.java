@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files;
+package com.github.smk7758.TosoGame_by_smk7758.FileUtils;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
