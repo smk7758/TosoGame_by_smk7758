@@ -2,6 +2,9 @@ package com.github.smk7758.TosoGame_by_smk7758.Files;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+import com.github.smk7758.TosoGame_by_smk7758.FileUtils.FileConfigurationEx;
+import com.github.smk7758.TosoGame_by_smk7758.FileUtils.SettingKeys;
+
 public class LanguageFile {
 	FileConfigurationEx fc = null;
 

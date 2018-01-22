@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758;
+package com.github.smk7758.TosoGame_by_smk7758.Util;
 
 import java.util.List;
 
@@ -7,9 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import com.github.smk7758.TosoGame_by_smk7758.Main;
+
 public class Book {
 
 	private Book(Main main) {
+	}
+
+	public static ItemStack createBook(String name, String title, List<String> lore, List<String> pages) {
+		return Book.createBook(name, title, lore, pages.toArray(new String[pages.size()]));
 	}
 
 	public static ItemStack createBook(String name, String title, List<String> lore_texts, String... pages) {

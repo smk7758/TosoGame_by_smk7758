@@ -12,11 +12,11 @@ import org.bukkit.scoreboard.Team;
 import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
-public class ScorebordManager {
+public class ScorebordTeam {
 	private Main main = null;
 	private Scoreboard board = null;
 
-	public ScorebordManager(Main main) {
+	public ScorebordTeam(Main main) {
 		board = main.getBoard();
 		for (TeamName name : TeamName.values()) {
 			// initialize teams
@@ -28,7 +28,7 @@ public class ScorebordManager {
 
 	// staticなんでいつか変更.
 	public enum TeamName {
-		Hunter("Hunter", "&C"), Runner("Runner", "&A"), OtherPlayer("OtherPlayer", "&F");
+		Hunter("Hunter", "&C"), Runner("Runner", "&A"), RunnerPrisoner("RunnerPrisoner", "&3"), OtherPlayer("OtherPlayer", "&F");
 
 		public String displayname, prefix;
 
@@ -37,6 +37,14 @@ public class ScorebordManager {
 			this.prefix = prefix;
 		}
 	}
+
+	// public class TeamName {
+	// Team Hunter, Runner, RunnerPrisoner, OtherPlayer;
+	//
+	// public class Team {
+	//
+	// }
+	// }
 
 	public Scoreboard getBoard() {
 		return board;
@@ -49,6 +57,13 @@ public class ScorebordManager {
 	public Set<Player> getTeamPlayers(TeamName name) {
 		Set<Player> players = new HashSet<>();
 		getTeam(name).getEntries().forEach(uuid -> players.add(Bukkit.getPlayer(UUID.fromString(uuid))));
+		return players;
+	}
+
+	public Set<Player> getAllRunner() {
+		Set<Player> players = new HashSet<>();
+		getTeam(TeamName.Runner).getEntries().forEach(uuid -> players.add(Bukkit.getPlayer(UUID.fromString(uuid))));
+		getTeam(TeamName.RunnerPrisoner).getEntries().forEach(uuid -> players.add(Bukkit.getPlayer(UUID.fromString(uuid))));
 		return players;
 	}
 
