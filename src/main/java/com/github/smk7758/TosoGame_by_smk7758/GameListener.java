@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.Game;
+package com.github.smk7758.TosoGame_by_smk7758;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -7,8 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.github.smk7758.TosoGame_by_smk7758.Main;
-import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
+import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordManager.TeamName;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class GameListener implements Listener {
