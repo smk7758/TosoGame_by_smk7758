@@ -2,17 +2,17 @@ package com.github.smk7758.TosoGame_by_smk7758.Files;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.github.smk7758.TosoGame_by_smk7758.FileUtils.FileConfigurationEx;
-import com.github.smk7758.TosoGame_by_smk7758.FileUtils.SettingKeys;
+import com.github.smk7758.TosoGame_by_smk7758.FileUtils._FileConfigurationEx;
+import com.github.smk7758.TosoGame_by_smk7758.FileUtils._SettingKeys;
 
-public class LanguageFile {
-	FileConfigurationEx fc = null;
+public class _LanguageFile {
+	_FileConfigurationEx fc = null;
 
-	public LanguageFile(FileConfiguration fc) {
-		this.fc = (FileConfigurationEx) fc;
+	public _LanguageFile(FileConfiguration fc) {
+		this.fc = (_FileConfigurationEx) fc;
 	}
 
-	public enum LanguageFileKeys implements SettingKeys {
+	public enum LanguageFileKeys implements _SettingKeys {
 		start(""), finish(""), stop(""), win_runner(""), win_hunter("");
 
 		private String text;

@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.github.smk7758.TosoGame_by_smk7758.FileUtils.YamlFileManager;
 import com.github.smk7758.TosoGame_by_smk7758.Files.ConfigFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.GameFile;
 import com.github.smk7758.TosoGame_by_smk7758.Game.Game;
 import com.github.smk7758.TosoGame_by_smk7758.Game.GameListener;
 
@@ -15,21 +17,38 @@ public class Main extends JavaPlugin {
 	private GameListener game_listner = new GameListener(this);
 	private Game game_manager = null;
 	private Scoreboard board = null;
-	private ConfigFile config_file = null;
+	private YamlFileManager yfm = new YamlFileManager(this);
+	public ConfigFile config_file = null;
+	public GameFile game_file = null;
 
 	@Override
 	public void onEnable() {
 		if (!Main.plugin_name.equals(getDescription().getName())) getPluginLoader().disablePlugin(this);
 		getServer().getPluginManager().registerEvents(game_listner, this);
 		getCommand("TosoGame").setExecutor(command_executer);
-		saveDefaultConfig();
 		board = Bukkit.getScoreboardManager().getNewScoreboard();
-		game_manager = new Game(this);
-		config_file = new ConfigFile();
+		config_file = new ConfigFile(this);
+		game_file = new GameFile(this);
+		saveDefaultFiles();
+		reloadFiles();
 	}
 
 	@Override
 	public void onDisable() {
+	}
+
+	public void saveDefaultFiles() {
+		yfm.saveDefaultYamlFile(config_file, false);
+		yfm.saveDefaultYamlFile(game_file, false);
+	}
+
+	public void reloadFiles() {
+		yfm.reloadYamlFile(config_file);
+		yfm.reloadYamlFile(game_file);
+	}
+
+	public YamlFileManager getYamlFileManager() {
+		return yfm;
 	}
 
 	public CommandExecuter getCommandExecuter() {

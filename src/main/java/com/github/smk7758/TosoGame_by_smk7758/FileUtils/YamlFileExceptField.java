@@ -15,6 +15,5 @@ import java.lang.annotation.Target;
  *
  * @author smk7758
  */
-public @interface YamlFileManagerField {
-	boolean value();
+public @interface YamlFileExceptField {
 }

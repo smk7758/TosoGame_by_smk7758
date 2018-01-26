@@ -9,11 +9,11 @@ import org.bukkit.command.CommandSender;
 import com.github.smk7758.TosoGame_by_smk7758.Main;
 
 public class SendLog {
-	public static final String chat_prefix = "[" + ChatColor.GREEN + Main.plugin_name + ChatColor.RESET + "] ";
-	public static final String console_prefix = "[" + Main.plugin_name + "] ";
-	public static final String error_prefix = ChatColor.RED + "[" + ChatColor.RESET + Main.plugin_name + ChatColor.RED + "] " + ChatColor.RESET;
-	public static final String debug_prefix = chat_prefix + "[Debug] ";
-	public static final Logger logger = Logger.getLogger("Minecraft");
+	private static final String chat_prefix = "[" + ChatColor.GREEN + Main.plugin_name + ChatColor.RESET + "] ";
+	private static final String console_prefix = "[" + Main.plugin_name + "] ";
+	private static final String error_prefix = ChatColor.RED + "[" + ChatColor.RESET + Main.plugin_name + ChatColor.RED + "] " + ChatColor.RESET;
+	private static final String debug_prefix = chat_prefix + "[Debug] ";
+	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	private SendLog() {
 	}
@@ -24,6 +24,10 @@ public class SendLog {
 
 	public static void error(String text, CommandSender sender) {
 		sender.sendMessage(error_prefix + text);
+	}
+
+	public static void debug(String text) {
+		debug(text, Bukkit.getConsoleSender());
 	}
 
 	public static void debug(String text, CommandSender sender) {
@@ -49,5 +53,9 @@ public class SendLog {
 
 	public static void sendBroadCast(String text, String permission) {
 		Bukkit.getServer().broadcast(text, permission);
+	}
+
+	public static Logger getLogger() {
+		return logger;
 	}
 }
