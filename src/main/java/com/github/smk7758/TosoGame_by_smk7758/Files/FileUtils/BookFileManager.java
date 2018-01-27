@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files;
+package com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -8,10 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class BookFile {
+public class BookFileManager {
 	Path book_folder_path = null;
 
-	public BookFile(Path plugins_folder_path) {
+	public BookFileManager(Path plugins_folder_path) {
 		try {
 			book_folder_path = Files.createDirectories(Paths.get(book_folder_path.toString(), "Book")); // これ正解？TODO
 			// TODO

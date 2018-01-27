@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.FileUtils;
+package com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils;
 
 import java.io.File;
 
@@ -11,9 +11,9 @@ public abstract class YamlFile {
 	private File file = null;
 
 	public YamlFile(Plugin plugin) {
-		String name = getFileName();// TODO
-		if (name == null) throw new NullPointerException("file namme is null.");
-		file = new File(plugin.getDataFolder(), name);
+		if (getFileName() == null) throw new NullPointerException("!!!! file name is null.");
+		file = new File(plugin.getDataFolder(), getFileName());
+		reloadFileConfiguration();
 	}
 
 	/**

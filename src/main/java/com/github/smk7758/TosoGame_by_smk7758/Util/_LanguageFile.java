@@ -1,12 +1,9 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files;
+package com.github.smk7758.TosoGame_by_smk7758.Util;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-import com.github.smk7758.TosoGame_by_smk7758.FileUtils._FileConfigurationEx;
-import com.github.smk7758.TosoGame_by_smk7758.FileUtils._SettingKeys;
-
 public class _LanguageFile {
-	_FileConfigurationEx fc = null;
+	com.github.smk7758.TosoGame_by_smk7758.Util._FileConfigurationEx fc = null;
 
 	public _LanguageFile(FileConfiguration fc) {
 		this.fc = (_FileConfigurationEx) fc;

@@ -33,7 +33,8 @@ public class CommandExecuter implements CommandExecutor {
 							if (sender instanceof Player) {
 								Location loc = ((Player) sender).getLocation();
 								main.getGameManager().prison_loc = loc;
-								SendLog.send("Prison has been set to: x: " + loc.getX() + " y: " + loc.getY() + " z: " + loc.getZ(), sender);
+								SendLog.send("Prison has been set to: x: " + loc.getX() + " y: " + loc.getY() + " z: "
+										+ loc.getZ(), sender);
 							} else {
 								SendLog.error("This command must use from player.", sender);
 								return false;
@@ -73,8 +74,10 @@ public class CommandExecuter implements CommandExecutor {
 					Player player_out = Bukkit.getPlayer(args[1]);
 					main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, player_out);
 					SendLog.send("You have been out from the TosoGame.", player_out);
-					main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Runner, args[1] + " has been out from the TosoGame.");
-					main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Hunter, args[1] + " has been out from the TosoGame.");
+					main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Runner,
+							args[1] + " has been out from the TosoGame.");
+					main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Hunter,
+							args[1] + " has been out from the TosoGame.");
 					// これを条件にするのあり。
 				} else if (args[0].equalsIgnoreCase("help")) {
 					showCommandList(sender);
@@ -100,7 +103,8 @@ public class CommandExecuter implements CommandExecutor {
 
 	public void showTeam(TeamName name, CommandSender sender) {
 		SendLog.send("Team: " + name, sender);
-		main.getGameManager().getTeamManager().getTeamPlayers(name).forEach(player -> SendLog.send(player.getName(), sender));
+		main.getGameManager().getTeamManager().getTeamPlayers(name)
+				.forEach(player -> SendLog.send(player.getName(), sender));
 	}
 
 	private void showCommandList(CommandSender sender) {

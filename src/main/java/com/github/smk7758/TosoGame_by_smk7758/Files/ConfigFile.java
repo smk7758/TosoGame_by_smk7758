@@ -2,25 +2,25 @@ package com.github.smk7758.TosoGame_by_smk7758.Files;
 
 import org.bukkit.plugin.Plugin;
 
-import com.github.smk7758.TosoGame_by_smk7758.FileUtils.YamlFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils.YamlFile;
 
 public class ConfigFile extends YamlFile {
-	String file_name = "config.yml";
+	private final String file_name = "config.yml"; // TODO final じゃないといけない！！
 	boolean DebugMode = false;
-	Hunter Hunter;
-	Runner Runner;
-	OtherPlayer OtherPlayer;
+	public Hunter Hunter;
+	public Runner Runner;
+	public OtherPlayer OtherPlayer;
 
 	public class Hunter {
-		String Prefix;
+		public String Prefix;
 	}
 
 	public class Runner {
-		String Prefix;
+		public String Prefix;
 	}
 
 	public class OtherPlayer {
-		String Prefix;
+		public String Prefix;
 	}
 
 	public ConfigFile(Plugin plugin) {

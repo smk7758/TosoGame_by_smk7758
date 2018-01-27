@@ -1,15 +1,11 @@
 package com.github.smk7758.TosoGame_by_smk7758.Game;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Files.GameFile;
@@ -35,30 +31,29 @@ public class Game extends GameParents {
 	@Override
 	public void start() {
 		switchIsGameStarting();
-		super.runTaskLater(main, game_length * 20);
-		sidebar = new Sidebar(main);
-		// Bukkit.getOnlinePlayers().forEach(player -> player.setScoreboard(team_manager.getBoard()));
+		super.runTaskLater(main, game_length * 20); // finishMethod will run later.
 		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGameStart!");
 		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGameStart!");
 		team_manager.getTeamPlayers(TeamName.Runner).forEach(player -> giveBook(player));
+		sidebar = new Sidebar(main, game_length, team_manager.getAllRunner().size());
 	}
 
 	@Override
 	public void loop() {
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				PotionEffect potion_effect = new PotionEffect(PotionEffectType.SPEED, 10, 1);
-				LocalDateTime time = LocalDateTime.now();
-				while (is_game_starting) {
-					if (LocalDateTime.now().isAfter(time)) {
-						main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Hunter)
-								.forEach(player -> player.addPotionEffect(potion_effect));
-						time = time.plusSeconds(5);
-					} // TODO
-				}
-			}
-		}.runTask(main);
+		// new BukkitRunnable() {
+		// @Override
+		// public void run() {
+		// PotionEffect potion_effect = new PotionEffect(PotionEffectType.SPEED, 10, 1);
+		// LocalDateTime time = LocalDateTime.now();
+		// while (is_game_starting) {
+		// if (LocalDateTime.now().isAfter(time)) {
+		// main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Hunter)
+		// .forEach(player -> player.addPotionEffect(potion_effect));
+		// time = time.plusSeconds(5);
+		// } // TODO
+		// }
+		// }
+		// }.runTask(main);
 	}
 
 	@Override
@@ -67,6 +62,7 @@ public class Game extends GameParents {
 		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Finished!");
 		team_manager.clearTeam();
 		switchIsGameStarting();
+		sidebar.close();
 	}
 
 	@Override
