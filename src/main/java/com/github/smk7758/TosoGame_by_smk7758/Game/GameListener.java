@@ -29,10 +29,15 @@ public class GameListener implements Listener {
 		Player damager = (Player) damager_;
 		if (!(main.getGameManager().getTeamManager().isTeam(TeamName.Hunter, attacker)
 				&& main.getGameManager().getTeamManager().isTeam(TeamName.Runner, damager))) return;
+		// --- finish check ---
+
+		main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, damager);
+		main.getGameManager().getTeamManager().setTeam(TeamName.RunnerPrisoner, damager);
 
 		// send mail
 		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Runner)
 				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
+		// TODO: also hunter?
 
 		new BukkitRunnable() {
 			@Override

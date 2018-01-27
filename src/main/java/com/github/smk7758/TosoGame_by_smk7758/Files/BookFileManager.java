@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils;
+package com.github.smk7758.TosoGame_by_smk7758.Files;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

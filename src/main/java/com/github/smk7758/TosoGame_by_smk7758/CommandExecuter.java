@@ -79,6 +79,12 @@ public class CommandExecuter implements CommandExecutor {
 					main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Hunter,
 							args[1] + " has been out from the TosoGame.");
 					// これを条件にするのあり。
+				} else if (args[0].equalsIgnoreCase("save")) {
+					main.getYamlFileManager().saveYamlFile(main.config_file);
+					main.getYamlFileManager().saveYamlFile(main.game_file);
+				} else if (args[0].equalsIgnoreCase("reload")) {
+					main.getYamlFileManager().reloadYamlFile(main.config_file);
+					main.getYamlFileManager().reloadYamlFile(main.game_file);
 				} else if (args[0].equalsIgnoreCase("help")) {
 					showCommandList(sender);
 				}

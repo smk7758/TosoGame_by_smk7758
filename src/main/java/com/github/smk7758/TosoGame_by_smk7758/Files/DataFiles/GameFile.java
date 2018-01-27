@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files;
+package com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.bukkit.plugin.Plugin;
 
-import com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils.YamlFile;
-import com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils.YamlFileExceptField;
+import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFileExceptField;
 import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
@@ -34,6 +34,9 @@ public class GameFile extends YamlFile {
 
 	@Override
 	public void loadField() {
+		reloadFileConfiguration(); // TODO これがなぜか必要。Why!?
+		SendLog.debug("loadField Method!");
+		SendLog.debug("GameLength: " + getFileConfiguration().getString("GameLength"));
 		String[] game_length_splitted = getFileConfiguration().getString("GameLength").split(",");
 		GameLength = LocalTime.of(Integer.parseInt(game_length_splitted[0]), Integer.parseInt(game_length_splitted[1]));
 

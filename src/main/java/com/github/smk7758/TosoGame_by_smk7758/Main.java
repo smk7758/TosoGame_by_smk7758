@@ -4,9 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 
-import com.github.smk7758.TosoGame_by_smk7758.Files.ConfigFile;
-import com.github.smk7758.TosoGame_by_smk7758.Files.GameFile;
-import com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils.YamlFileManager;
+import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFileManager;
+import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.ConfigFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.GameFile;
 import com.github.smk7758.TosoGame_by_smk7758.Game.Game;
 import com.github.smk7758.TosoGame_by_smk7758.Game.GameListener;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
@@ -30,14 +31,15 @@ public class Main extends JavaPlugin {
 		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 		yfm = new YamlFileManager(this);
 		SendLog.debug("start config file!");
+
 		config_file = new ConfigFile(this);
 		saveResource(config_file.getFileName(), false);
 		config_file = (ConfigFile) yfm.reloadYamlFile(config_file);
 		// !!! yfm.saveDefaultYamlFile(config_file, false);
 
-		// game_file = new GameFile(this);
-		// saveResource(game_file.getFileName(), false);
-		// game_file = (GameFile) yfm.reloadYamlFile(game_file);
+		game_file = new GameFile(this);
+		saveResource(game_file.getFileName(), false);
+		game_file = (GameFile) yfm.reloadYamlFile(game_file);
 		// !!! yfm.saveDefaultYamlFile(game_file, false);
 
 		// reloadFiles(); // load field to class object.
@@ -72,5 +74,9 @@ public class Main extends JavaPlugin {
 	public Scoreboard getScoreBoard() {
 		return scoreboard;
 	}
-	// TODO configfile, sidebar(数値変化Event - HunterTouchRunner), PotionClearEvent.
+
+	public void saveResource(YamlFile file, boolean replace) {
+		if (replace || !file.getFile().exists()) saveResource(file.getFileName(), replace);
+	}
+	// TODO: save config, tab complete, time, command args, book or chat
 }

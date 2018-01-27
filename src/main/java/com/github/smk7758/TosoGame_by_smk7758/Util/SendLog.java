@@ -11,15 +11,24 @@ import com.github.smk7758.TosoGame_by_smk7758.Main;
 public class SendLog {
 	private static final String chat_prefix = "[" + ChatColor.GREEN + Main.plugin_name + ChatColor.RESET + "] ";
 	private static final String console_prefix = "[" + Main.plugin_name + "] ";
-	private static final String error_prefix = ChatColor.RED + "[" + ChatColor.RESET + Main.plugin_name + ChatColor.RED + "] " + ChatColor.RESET;
+	private static final String error_prefix = ChatColor.RED + "[" + ChatColor.RESET + Main.plugin_name + ChatColor.RED
+			+ "] " + ChatColor.RESET;
 	private static final String debug_prefix = chat_prefix + "[Debug] ";
 	private static final Logger logger = Logger.getLogger("Minecraft");
 
 	private SendLog() {
 	}
 
+	public static void send(String text) {
+		Bukkit.getConsoleSender().sendMessage(chat_prefix + text);
+	}
+
 	public static void send(String text, CommandSender sender) {
 		sender.sendMessage(chat_prefix + text);
+	}
+
+	public static void error(String text) {
+		Bukkit.getConsoleSender().sendMessage(error_prefix + text);
 	}
 
 	public static void error(String text, CommandSender sender) {

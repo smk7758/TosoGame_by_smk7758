@@ -1,4 +1,4 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils;
+package com.github.smk7758.TosoGame_by_smk7758.Files;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +18,7 @@ public class YamlFileManager {
 	}
 
 	public YamlFile reloadYamlFile(YamlFile file) {
+		file.reloadFileConfiguration();
 		return loadFields(file, file, null);
 	}
 

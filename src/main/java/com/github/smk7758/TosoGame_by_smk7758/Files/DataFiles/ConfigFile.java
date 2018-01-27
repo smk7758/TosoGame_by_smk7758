@@ -1,8 +1,8 @@
-package com.github.smk7758.TosoGame_by_smk7758.Files;
+package com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles;
 
 import org.bukkit.plugin.Plugin;
 
-import com.github.smk7758.TosoGame_by_smk7758.Files.FileUtils.YamlFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
 
 public class ConfigFile extends YamlFile {
 	private final String file_name = "config.yml"; // TODO final じゃないといけない！！
