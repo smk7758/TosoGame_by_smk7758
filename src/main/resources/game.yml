@@ -1,21 +1,22 @@
 GameName: test
-GameLength: 1,00 #1h,00min
+GameLength: 1 #1min
 Book:
   Name: test
   Title: test!!
   Lore:
     - lore test.
-  Pages:
+  FolderName: Books
+  PageTextFiles:
     - test.txt #Set the file name(+ file extention) in Book folder file.
 Prison:
   Location:
-    x: 0
-    y: 0
-    z: 0
+    X: 0
+    Y: 0
+    Z: 0
 HunterBox:
   Location:
-    x: 0
-    y: 0
-    z: 0
+    X: 0
+    Y: 0
+    Z: 0
 Players:
   - UUID: TeamName

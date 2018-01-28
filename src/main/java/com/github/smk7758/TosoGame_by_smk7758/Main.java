@@ -20,8 +20,8 @@ public class Main extends JavaPlugin {
 	private Game game_manager = null;
 	private Scoreboard scoreboard = null;
 	private YamlFileManager yfm = null;
-	public ConfigFile config_file = null;
-	public GameFile game_file = null;
+	public ConfigFile configfile = null;
+	public GameFile gamefile = null;
 
 	@Override
 	public void onEnable() {
@@ -32,17 +32,18 @@ public class Main extends JavaPlugin {
 		yfm = new YamlFileManager(this);
 		SendLog.debug("start config file!");
 
-		config_file = new ConfigFile(this);
-		saveResource(config_file.getFileName(), false);
-		config_file = (ConfigFile) yfm.reloadYamlFile(config_file);
+		configfile = new ConfigFile(this);
+		saveResource(configfile.getFileName(), false);
+		configfile = (ConfigFile) yfm.reloadYamlFile(configfile);
 		// !!! yfm.saveDefaultYamlFile(config_file, false);
 
-		game_file = new GameFile(this);
-		saveResource(game_file.getFileName(), false);
-		game_file = (GameFile) yfm.reloadYamlFile(game_file);
+		gamefile = new GameFile(this);
+		saveResource(gamefile.getFileName(), false);
+		gamefile = (GameFile) yfm.reloadYamlFile(gamefile);
 		// !!! yfm.saveDefaultYamlFile(game_file, false);
 
 		// reloadFiles(); // load field to class object.
+
 		game_manager = new Game(this);
 	}
 
@@ -51,8 +52,8 @@ public class Main extends JavaPlugin {
 	}
 
 	public void reloadFiles() {
-		config_file = (ConfigFile) yfm.reloadYamlFile(config_file);
-		game_file = (GameFile) yfm.reloadYamlFile(game_file);
+		configfile = (ConfigFile) yfm.reloadYamlFile(configfile);
+		gamefile = (GameFile) yfm.reloadYamlFile(gamefile);
 	}
 
 	public YamlFileManager getYamlFileManager() {

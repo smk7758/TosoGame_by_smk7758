@@ -42,7 +42,7 @@ public class GameListener implements Listener {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				damager.teleport(main.getGameManager().prison_loc);
+				damager.teleport(main.getGameManager().gamefile.prison_loc);
 			}
 		}.runTaskLater(main, wait_time * 20);
 	}

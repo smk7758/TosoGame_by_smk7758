@@ -16,13 +16,13 @@ public class Sidebar implements Closeable {
 	private String objective_name = "TosoGame";
 	private String dispray_name = "TosoGame";
 
-	public Sidebar(Main main, int time, int runner) {
+	public Sidebar(Main main, int game_length, int runner) {
 		// TODO: Game複数実行時は第一引数を変更。
 		scoreboard = main.getScoreBoard();
 		objective = scoreboard.registerNewObjective(objective_name, "dummy");
 		objective.setDisplayName(dispray_name);
 		objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-		setSidebar(SidebarContents.Time, time);
+		setSidebar(SidebarContents.Time, game_length);
 		setSidebar(SidebarContents.Runner, runner);
 		setSidebar(SidebarContents.Prisoner, 0);
 		Bukkit.getOnlinePlayers().forEach(player -> player.setScoreboard(scoreboard));

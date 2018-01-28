@@ -1,10 +1,8 @@
 package com.github.smk7758.TosoGame_by_smk7758.Game;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -15,45 +13,51 @@ import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.GameFile;
 import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
 import com.github.smk7758.TosoGame_by_smk7758.Game.Sidebar.SidebarContents;
-import com.github.smk7758.TosoGame_by_smk7758.Util.Book;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class Game implements GameParents {
 	private Main main = null;
 	private boolean is_game_starting = false;
 
-	public int game_length = 20;
-	public int loop_interval = 5;
+	// public int game_length = 20;
+	public int loop_interval = 5;// TODO -> 1
 	public ItemStack itemstack_book = null;
-	public Location prison_loc = null;
 	public List<Location> hunter_loc = null;
 	private BukkitTask loop = null;
 
+	private BookManager bfm = null;
 	private ScorebordTeam team_manager = null;
 	private Sidebar sidebar = null;
-	public GameFile game_file = null;
+	public GameFile gamefile = null;
 
 	public Game(Main main) {
 		this.main = main;
 		team_manager = new ScorebordTeam(main);
-		this.game_file = main.game_file;
+		this.gamefile = main.gamefile;
+		bfm = new BookManager(main.getDataFolder().toPath(), gamefile, gamefile.Book.Name);
 	}
 
 	@Override
 	public void start() {
-		if (prison_loc == null) {
+		if (gamefile.prison_loc == null) {
 			// TODO
 			SendLog.warn("Please set prison loc!");
 			return;
 		}
 		switchIsGameStarting();
-		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGameStart!");
-		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGameStart!");
+
+		// clear inv
 		team_manager.getTeamPlayers(TeamName.Runner).forEach(player -> player.getInventory().clear());
-		team_manager.getTeamPlayers(TeamName.Runner).forEach(player -> giveBook(player));
-		sidebar = new Sidebar(main, game_length, team_manager.getAllRunner().size());
+		// give book
+		team_manager.getTeamPlayers(TeamName.Runner).forEach(player -> bfm.giveBook(player));
+		sidebar = new Sidebar(main, gamefile.GameLength.getAsSecond(), team_manager.getAllRunner().size());
+
 		removeAllPotionEffects(TeamName.Hunter);
 		loop();
+
+		// send start!
+		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGameStart!");
+		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGameStart!");
 	}
 
 	@Override
@@ -85,7 +89,7 @@ public class Game implements GameParents {
 				team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Finished!");
 				close();
 			}
-		}.runTaskLater(main, game_length * 20);
+		}.runTaskLater(main, gamefile.GameLength.getAsSecond() * 20);
 	}
 
 	@Override
@@ -122,10 +126,7 @@ public class Game implements GameParents {
 		return team_manager;
 	}
 
-	public void giveBook(Player player) {
-		List<String> lore = new ArrayList<>();
-		lore.add("test");
-		player.getInventory().addItem(
-				Book.createBook(game_file.Book.Name, game_file.Book.Title, game_file.Book.Lore, game_file.Book.Pages));
+	public BookManager getBookFileManager() {
+		return bfm;
 	}
 }

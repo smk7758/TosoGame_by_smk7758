@@ -9,15 +9,24 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.smk7758.TosoGame_by_smk7758.Main;
 
-public class Book {
-
-	private Book(Main main) {
+public class BookAPI {
+	// TODO
+	private BookAPI(Main main) {
 	}
 
-	public static ItemStack createBook(String name, String title, List<String> lore, List<String> pages) {
-		return Book.createBook(name, title, lore, pages.toArray(new String[pages.size()]));
-	}
+	// public static ItemStack createBook(String name, String title, List<String> lore, List<String> pages) {
+	// return createBook(name, title, lore, pages.toArray(new String[pages.size()]));
+	// }
 
+	/**
+	 * Creates the book which is same as other arguments.
+	 *
+	 * @param name
+	 * @param title
+	 * @param lore_texts
+	 * @param pages
+	 * @return
+	 */
 	public static ItemStack createBook(String name, String title, List<String> lore_texts, String... pages) {
 		ItemStack itemstack = new ItemStack(Material.WRITTEN_BOOK);
 		BookMeta book = (BookMeta) itemstack.getItemMeta();
@@ -31,6 +40,16 @@ public class Book {
 		return itemstack;
 	}
 
+	/**
+	 * Adds the page to the book which is same as other aruguments.
+	 *
+	 * @param player Who has a book which is same as other arguments.
+	 * @param name book
+	 * @param title book
+	 * @param lore_text book
+	 * @param pages Adding pages.
+	 * @return Success full or not.
+	 */
 	public static boolean addPage(Player player, String name, String title, List<String> lore_text, String... pages) {
 		boolean is = false;
 		for (ItemStack itemstack_player : player.getInventory()) {
@@ -45,5 +64,20 @@ public class Book {
 			}
 		}
 		return is;
+	}
+
+	/**
+	 * Gets the book in main hand.
+	 *
+	 * @param player Player who has the written book.
+	 * @return Returns book. If player doesn't have the written book, this will return null.
+	 */
+	public static BookMeta getPlayerBookInMainHand(Player player) {
+		BookMeta book = null;
+		ItemStack itemstack_player = player.getInventory().getItemInMainHand();
+		if (itemstack_player.getType().equals(Material.WRITTEN_BOOK)) {
+			book = (BookMeta) itemstack_player.getItemMeta();
+		}
+		return book;
 	}
 }
