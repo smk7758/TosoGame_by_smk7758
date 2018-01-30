@@ -31,13 +31,21 @@ public class GameListener implements Listener {
 				&& main.getGameManager().getTeamManager().isTeam(TeamName.Runner, damager))) return;
 		// --- finish check ---
 
-		main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, damager);
-		main.getGameManager().getTeamManager().setTeam(TeamName.RunnerPrisoner, damager);
-
 		// send mail
 		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Runner)
 				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
-		// TODO: also hunter?
+		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.RunnerPrisoner)
+				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
+		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Hunter)
+				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
+
+		// change team
+		main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, damager);
+		main.getGameManager().getTeamManager().setTeam(TeamName.RunnerPrisoner, damager);
+
+		SendLog.send("After " + wait_time + " seconds, you will be teleported to the prison.", damager);
+
+		// TODO if caught.
 
 		new BukkitRunnable() {
 			@Override

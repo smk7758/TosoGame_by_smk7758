@@ -61,14 +61,14 @@ public class Game implements GameParents {
 		// TODO timer
 
 		// send start!
-		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGameStart!");
-		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGameStart!");
+		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGame Start!");
+		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Start!");
 	}
 
 	@Override
 	public void loop() {
 		loop = new BukkitRunnable() {
-			PotionEffect potion_effect = new PotionEffect(PotionEffectType.SPEED, Short.MAX_VALUE, 1);
+			PotionEffect potion_effect = new PotionEffect(PotionEffectType.SPEED, Short.MAX_VALUE, 0);
 
 			@Override
 			public void run() {
@@ -78,10 +78,13 @@ public class Game implements GameParents {
 				sidebar.setSidebar(SidebarContents.Prisoner,
 						team_manager.getTeamPlayers(TeamName.RunnerPrisoner).size());
 				if (0 == team_manager.getTeamPlayers(TeamName.Runner).size()) {
-					finish();
+					team_manager.sendTeamPlayers(TeamName.Hunter, "All players have been caught. TosoGame Finished!");
+					team_manager.sendTeamPlayers(TeamName.Runner, "All players have been caught. TosoGame Finished!");
+					close();
+				} else {
+					time_count -= 1;
+					sidebar.setSidebar(SidebarContents.Time, time_count);
 				}
-				time_count -= 1;
-				sidebar.setSidebar(SidebarContents.Time, time_count);
 			}
 		}.runTaskTimer(main, 0, 1 * 20);
 	}
@@ -100,15 +103,16 @@ public class Game implements GameParents {
 
 	@Override
 	public void stop() {
-		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGame stop!");
-		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame stop!");
+		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGame Stop!");
+		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Stop!");
 		close();
 	}
 
 	private void close() {
 		team_manager.getTeamPlayers(TeamName.Runner).forEach(player -> player.getInventory().clear());
-		team_manager.clearTeam();
 		removeAllPotionEffects(TeamName.Hunter);
+
+		team_manager.clearTeam();
 		loop.cancel();
 		sidebar.close();
 		switchIsGameStarting();

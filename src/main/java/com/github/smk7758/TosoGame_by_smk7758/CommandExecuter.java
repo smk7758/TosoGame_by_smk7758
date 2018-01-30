@@ -99,6 +99,7 @@ public class CommandExecuter implements CommandExecutor {
 				main.getYamlFileManager().reloadYamlFile(main.gamefile);
 			} else if (args[0].equalsIgnoreCase("addbook")) {
 				if (!main.getGameManager().addNextPage()) SendLog.error("Can't add page to the book.", sender);
+				else SendLog.send("The book has been added from the file.", sender);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				showCommandList(sender);
 			}
@@ -108,13 +109,15 @@ public class CommandExecuter implements CommandExecutor {
 	}
 
 	public void setTeam(TeamName name, String player_name, CommandSender sender) {
-		main.getGameManager().getTeamManager().setTeam(name, Bukkit.getPlayer(player_name));
-		SendLog.send(player_name + " has been added to Team: " + name.toString(), sender);
+		boolean success = main.getGameManager().getTeamManager().setTeam(name, player_name);
+		if (success) SendLog.send(player_name + " has been added to Team: " + name.toString(), sender);
+		else SendLog.error("Can't add " + player_name + " to Team: " + name.toString(), sender);
 	}
 
 	public void removeTeam(TeamName name, String player_name, CommandSender sender) {
-		main.getGameManager().getTeamManager().removeTeam(name, Bukkit.getPlayer(player_name));
-		SendLog.send(player_name + " has been removed from Team: " + name.toString(), sender);
+		boolean success = main.getGameManager().getTeamManager().removeTeam(name, player_name);
+		if (success) SendLog.send(player_name + " has been removed from Team: " + name.toString(), sender);
+		else SendLog.error("Can't remove " + player_name + " to Team: " + name.toString(), sender);
 	}
 
 	public void showTeam(TeamName name, CommandSender sender) {

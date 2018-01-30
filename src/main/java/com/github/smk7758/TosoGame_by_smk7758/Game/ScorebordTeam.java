@@ -75,11 +75,27 @@ public class ScorebordTeam {
 	}
 
 	public boolean isTeam(TeamName name, Player player) {
+		if (player == null) throw new IllegalArgumentException("Player is null.");
 		return getTeam(name).getEntries().contains(player.getUniqueId().toString());
 	}
 
+	public boolean setTeam(TeamName name, String player_name) {
+		Player player = Bukkit.getPlayer(player_name);
+		if (player == null) return false;
+		setTeam(name, player);
+		return true;
+	}
+
 	public void setTeam(TeamName name, Player player) {
+		if (player == null) throw new IllegalArgumentException("Player is null.");
 		getTeam(name).addEntry(player.getUniqueId().toString());
+	}
+
+	public boolean removeTeam(TeamName name, String player_name) {
+		Player player = Bukkit.getPlayer(player_name);
+		if (player == null) return false;
+		removeTeam(name, player);
+		return false;
 	}
 
 	public void removeTeam(TeamName name, Player player) {

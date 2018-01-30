@@ -107,9 +107,9 @@ public class BookManager {
 	private String getPageTextFile(int page_number) {
 		SendLog.debug("PageTextNumber: " + page_number);
 
-		if (gamefile.Book.PageTextFiles != null
-				&& !gamefile.Book.PageTextFiles.isEmpty()
-				&& gamefile.Book.PageTextFiles.size() < page_number) {
+		if (gamefile.Book.PageTextFiles == null
+				|| gamefile.Book.PageTextFiles.isEmpty()
+				|| gamefile.Book.PageTextFiles.size() <= page_number) {
 			SendLog.error("Page number is too big.");
 			return "";
 		}
