@@ -63,11 +63,16 @@ public class GameFile extends YamlFile {
 
 	public Location getLocation() {
 		String path = "Prison.Location";
-		World pl_world = Bukkit.getServer().getWorld(getFileConfiguration().getString(path + ".World"));
-		double pl_x = getFileConfiguration().getDouble(path + ".X");
-		double pl_y = getFileConfiguration().getDouble(path + ".Y");
-		double pl_z = getFileConfiguration().getDouble(path + ".Z");
-		return new Location(pl_world, pl_x, pl_y, pl_z);
+		String world_name = getFileConfiguration().getString(path + ".World");
+		World world = null;
+		if (world_name == null || (world = Bukkit.getServer().getWorld(world_name)) == null) {
+			SendLog.error("Can't find: " + path + ".World");
+			world = Bukkit.getWorlds().get(0);
+		}
+		double x = getFileConfiguration().getDouble(path + ".X");
+		double y = getFileConfiguration().getDouble(path + ".Y");
+		double z = getFileConfiguration().getDouble(path + ".Z");
+		return new Location(world, x, y, z);
 
 		// String world = player.getWorld().getName();
 		// double x = player.getLocation().getX();

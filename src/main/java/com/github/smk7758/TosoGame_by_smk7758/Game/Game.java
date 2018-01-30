@@ -3,6 +3,7 @@ package com.github.smk7758.TosoGame_by_smk7758.Game;
 import java.util.List;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -19,8 +20,7 @@ public class Game implements GameParents {
 	private Main main = null;
 	private boolean is_game_starting = false;
 
-	// public int game_length = 20;
-	public int loop_interval = 5;// TODO -> 1
+	private int time_count = 1;
 	public ItemStack itemstack_book = null;
 	public List<Location> hunter_loc = null;
 	private BukkitTask loop = null;
@@ -33,8 +33,7 @@ public class Game implements GameParents {
 	public Game(Main main) {
 		this.main = main;
 		team_manager = new ScorebordTeam(main);
-		this.gamefile = main.gamefile;
-		bfm = new BookManager(main.getDataFolder().toPath(), gamefile, gamefile.Book.Name);
+		this.gamefile = main.gamefile; // TODO
 	}
 
 	@Override
@@ -44,6 +43,9 @@ public class Game implements GameParents {
 			SendLog.warn("Please set prison loc!");
 			return;
 		}
+		bfm = new BookManager(main, gamefile);
+		time_count = gamefile.GameLength.getAsSecond();
+
 		switchIsGameStarting();
 
 		// clear inv
@@ -54,6 +56,9 @@ public class Game implements GameParents {
 
 		removeAllPotionEffects(TeamName.Hunter);
 		loop();
+		finish();
+
+		// TODO timer
 
 		// send start!
 		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGameStart!");
@@ -75,9 +80,10 @@ public class Game implements GameParents {
 				if (0 == team_manager.getTeamPlayers(TeamName.Runner).size()) {
 					finish();
 				}
-				// sidebar.setSidebar(SidebarContents.Time, value);
+				time_count -= 1;
+				sidebar.setSidebar(SidebarContents.Time, time_count);
 			}
-		}.runTaskTimer(main, 0, loop_interval * 20);
+		}.runTaskTimer(main, 0, 1 * 20);
 	}
 
 	@Override
@@ -112,6 +118,14 @@ public class Game implements GameParents {
 		// remove name's all potion effect
 		getTeamManager().getTeamPlayers(name).forEach(player -> player.getActivePotionEffects()
 				.forEach(potion_effect -> player.removePotionEffect(potion_effect.getType())));
+	}
+
+	public boolean addNextPage() {
+		boolean is_successful = true;
+		for (Player player : team_manager.getTeamPlayers(TeamName.Runner)) {
+			if (!bfm.addNextPage(player)) is_successful = false;
+		}
+		return is_successful;
 	}
 
 	public boolean getIsGameStarting() {

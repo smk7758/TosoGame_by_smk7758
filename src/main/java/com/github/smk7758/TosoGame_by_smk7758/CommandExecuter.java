@@ -23,10 +23,12 @@ public class CommandExecuter implements CommandExecutor {
 			if (args.length <= 0) {
 				SendLog.error("Please write arguments.", sender);
 				showCommandList(sender);
+				return false;
 			}
 			if (args[0].equalsIgnoreCase("set")) {
 				if (args.length <= 1) {
 					// TODO
+					return false;
 				}
 				if (args[1].equalsIgnoreCase("hunter")) {
 					setTeam(TeamName.Hunter, args[2], sender);
@@ -48,6 +50,7 @@ public class CommandExecuter implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("remove")) {
 				if (args.length <= 1) {
 					// TODO
+					return false;
 				}
 				if (args[1].equalsIgnoreCase("hunter")) {
 					removeTeam(TeamName.Hunter, args[2], sender);
@@ -61,6 +64,7 @@ public class CommandExecuter implements CommandExecutor {
 					for (TeamName name : TeamName.values()) {
 						showTeam(name, sender);
 					}
+					return false;
 				}
 				if (args[1].equalsIgnoreCase("hunter")) {
 					showTeam(TeamName.Hunter, sender);
@@ -77,6 +81,7 @@ public class CommandExecuter implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("out")) {
 				if (args.length <= 1) {
 					// TODO
+					return false;
 				}
 				Player player_out = Bukkit.getPlayer(args[1]);
 				main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, player_out);
@@ -92,8 +97,8 @@ public class CommandExecuter implements CommandExecutor {
 			} else if (args[0].equalsIgnoreCase("reload")) {
 				main.getYamlFileManager().reloadYamlFile(main.configfile);
 				main.getYamlFileManager().reloadYamlFile(main.gamefile);
-			} else if (args[0].equalsIgnoreCase("book")) {
-				// Book.createBook(main.game_file.Book, pages)
+			} else if (args[0].equalsIgnoreCase("addbook")) {
+				if (!main.getGameManager().addNextPage()) SendLog.error("Can't add page to the book.", sender);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				showCommandList(sender);
 			}

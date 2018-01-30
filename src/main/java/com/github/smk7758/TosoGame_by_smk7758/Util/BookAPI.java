@@ -51,19 +51,21 @@ public class BookAPI {
 	 * @return Success full or not.
 	 */
 	public static boolean addPage(Player player, String name, String title, List<String> lore_text, String... pages) {
-		boolean is = false;
+		boolean is_successful = false;
+
+		if (pages.length <= 0 || pages[0].isEmpty()) return false;
 		for (ItemStack itemstack_player : player.getInventory()) {
-			if (itemstack_player.getType() != Material.WRITTEN_BOOK) break;
+			if (itemstack_player == null || itemstack_player.getType() != Material.WRITTEN_BOOK) break;
 			BookMeta book = (BookMeta) itemstack_player.getItemMeta();
 			if (book.getDisplayName().equals(name)
 					&& book.getTitle().equals(title)
 					&& book.getLore().equals(lore_text)) {
 				book.addPage(pages);
 				itemstack_player.setItemMeta(book);
-				if (!is) is = true;
+				if (!is_successful) is_successful = true;
 			}
 		}
-		return is;
+		return is_successful;
 	}
 
 	/**

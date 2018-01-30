@@ -7,9 +7,11 @@ Book:
     - lore test.
   FolderName: Books
   PageTextFiles:
-    - test.txt #Set the file name(+ file extention) in Book folder file.
+    - test_0.txt #The first page. Set the file name(+ file extention) in Book folder file.
+    - test_1.txt #The second page.
 Prison:
   Location:
+    World: world
     X: 0
     Y: 0
     Z: 0
