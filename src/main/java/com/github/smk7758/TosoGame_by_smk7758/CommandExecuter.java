@@ -26,8 +26,7 @@ public class CommandExecuter implements CommandExecutor {
 				return false;
 			}
 			if (args[0].equalsIgnoreCase("set")) {
-				if (args.length <= 1) {
-					// TODO
+				if (args.length <= 2) {
 					return false;
 				}
 				if (args[1].equalsIgnoreCase("hunter")) {
@@ -48,8 +47,7 @@ public class CommandExecuter implements CommandExecutor {
 					}
 				}
 			} else if (args[0].equalsIgnoreCase("remove")) {
-				if (args.length <= 1) {
-					// TODO
+				if (args.length <= 2) {
 					return false;
 				}
 				if (args[1].equalsIgnoreCase("hunter")) {
@@ -72,6 +70,11 @@ public class CommandExecuter implements CommandExecutor {
 					showTeam(TeamName.Runner, sender);
 				} else if (args[1].equalsIgnoreCase("otherplayer")) {
 					showTeam(TeamName.OtherPlayer, sender);
+				} else if (args[1].equalsIgnoreCase("prison")) {
+					SendLog.send("World:" + main.gamefile.prison_loc.getWorld().getName());
+					SendLog.send("X:" + main.gamefile.prison_loc.getX());
+					SendLog.send("Y:" + main.gamefile.prison_loc.getY());
+					SendLog.send("Z:" + main.gamefile.prison_loc.getZ());
 				}
 			} else if (args[0].equalsIgnoreCase("start")) {
 				if (main.getGameManager().start()) {
@@ -128,7 +131,6 @@ public class CommandExecuter implements CommandExecutor {
 			return true;
 		}
 		return false;
-
 	}
 
 	public void setTeam(TeamName name, String player_name, CommandSender sender) {
@@ -140,7 +142,7 @@ public class CommandExecuter implements CommandExecutor {
 	public void removeTeam(TeamName name, String player_name, CommandSender sender) {
 		boolean success = main.getGameManager().getTeamManager().removeTeam(name, player_name);
 		if (success) SendLog.send(player_name + " has been removed from Team: " + name.toString(), sender);
-		else SendLog.error("Can't remove " + player_name + " to Team: " + name.toString(), sender);
+		else SendLog.error("Can't remove " + player_name + " from Team: " + name.toString(), sender);
 	}
 
 	public void showTeam(TeamName name, CommandSender sender) {

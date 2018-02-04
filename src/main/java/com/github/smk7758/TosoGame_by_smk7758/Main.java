@@ -75,5 +75,5 @@ public class Main extends JavaPlugin {
 	public void saveResource(YamlFile file, boolean replace) {
 		if (replace || !file.getFile().exists()) saveResource(file.getFileName(), replace);
 	}
-	// TODO: save config(PUBLIC?), tab complete, command args, book or chat, after game calling stop
+	// TODO: save config(PUBLIC?), tab complete, command args, book or chat, recalling?reusing? the game
 }

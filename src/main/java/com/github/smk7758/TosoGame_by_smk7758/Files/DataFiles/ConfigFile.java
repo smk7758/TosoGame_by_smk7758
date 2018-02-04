@@ -2,6 +2,7 @@ package com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles;
 
 import org.bukkit.plugin.Plugin;
 
+import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
 
 public class ConfigFile extends YamlFile {
@@ -34,6 +35,7 @@ public class ConfigFile extends YamlFile {
 
 	@Override
 	public void loadField() {
+		Main.debug_mode = DebugMode;
 	}
 
 	@Override

@@ -52,6 +52,7 @@ public class YamlFileManager {
 			SendLog.debug(field.getName() + " | " + field.getType() + " | " + field.getGenericType());
 			// アノテーション付きを弾く。
 			if (field.isAnnotationPresent(YamlFileExceptField.class)) continue;
+
 			// TODO: テスト必要。
 			yaml_path_access = parent_yaml_path + field.getName();
 
@@ -113,7 +114,6 @@ public class YamlFileManager {
 		}
 	}
 
-	// TODO
 	public void saveYamlFile(YamlFile file) {
 		saveFields(file, file, null);
 	}
@@ -142,6 +142,14 @@ public class YamlFileManager {
 			if (isFieldValueType(field)) {
 				try {
 					SendLog.debug("Path: " + yaml_path_access);
+					SendLog.debug("Data: " + field.get(parent).toString());
+					file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
+				} catch (IllegalArgumentException | IllegalAccessException ex) {
+					ex.printStackTrace();
+				}
+			} else if (field.getType().equals(List.class) && field.getGenericType().equals(String.class)) {
+				try {
+					SendLog.debug("Path: " + yaml_path_access);
 					SendLog.debug("Data: " + field.get(parent));
 					file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
 				} catch (IllegalArgumentException | IllegalAccessException ex) {
@@ -163,7 +171,6 @@ public class YamlFileManager {
 
 	private boolean isFieldValueType(Field field) {
 		if (field.getType().equals(String.class)
-				|| field.getType().equals(List.class) && field.getGenericType().equals(String.class)
 				|| field.getType().equals(int.class)
 				|| field.getType().equals(double.class)
 				|| field.getType().equals(float.class)

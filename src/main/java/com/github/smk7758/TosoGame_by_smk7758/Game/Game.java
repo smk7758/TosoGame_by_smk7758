@@ -128,6 +128,8 @@ public class Game {
 	}
 
 	public void caught(Player player) {
+		if (!isGameStarting()) return;
+		SendLog.debug("Player: " + player.getName() + " has been caught.");
 		// send mail
 		getTeamManager().getTeamPlayers(TeamName.Runner)
 				.forEach(player_send -> SendLog.send(player.getName() + " has been caught.", player_send));
@@ -145,7 +147,9 @@ public class Game {
 	}
 
 	public void out(Player player) {
+		if (!isGameStarting()) return;
 		getTeamManager().changeTeam(player, TeamName.OtherPlayer);
+		SendLog.debug("Player: " + player.getName() + " has been out.");
 		SendLog.send("You have been out from the TosoGame.", player);
 
 		main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Runner,

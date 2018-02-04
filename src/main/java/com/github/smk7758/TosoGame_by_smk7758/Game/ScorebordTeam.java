@@ -76,7 +76,7 @@ public class ScorebordTeam {
 
 	public boolean isTeam(TeamName name, Player player) {
 		if (player == null) throw new IllegalArgumentException("Player is null.");
-		return getTeam(name).getEntries().contains(player.getUniqueId().toString());
+		return getTeam(name).hasEntry(player.getUniqueId().toString());
 	}
 
 	public boolean setTeam(TeamName name, String player_name) {
@@ -95,13 +95,18 @@ public class ScorebordTeam {
 	public boolean removeTeam(TeamName name, String player_name) {
 		Player player = Bukkit.getPlayer(player_name);
 		if (player == null) return false;
-		removeTeam(name, player);
-		return false;
+		return removeTeam(name, player);
 	}
 
-	public void removeTeam(TeamName name, Player player) {
-		getTeam(name).removeEntry(player.getUniqueId().toString());
-		SendLog.debug(player.getName() + " has been removed to Team: " + name.toString());
+	public boolean removeTeam(TeamName name, Player player) {
+		if (isTeam(name, player)) {
+			getTeam(name).removeEntry(player.getUniqueId().toString());
+			SendLog.debug(player.getName() + " has been removed to Team: " + name.toString());
+			return true;
+		} else {
+			SendLog.debug(player.getName() + " is not in the Team: " + name.toString());
+			return false;
+		}
 	}
 
 	public void removeTeamAll(TeamName name) {

@@ -63,21 +63,6 @@ public class GameFile extends YamlFile {
 		double y = getFileConfiguration().getDouble(path + ".Y");
 		double z = getFileConfiguration().getDouble(path + ".Z");
 		return new Location(world, x, y, z);
-
-		// String world = player.getWorld().getName();
-		// double x = player.getLocation().getX();
-		// double y = player.getLocation().getY();
-		// double z = player.getLocation().getZ();
-		// float yaw = player.getLocation().getYaw();
-		// float pitch = player.getLocation().getPitch();
-		// plugin.FileIO.LocationIO(true, "config", type, world, x, y, z, yaw, pitch);
-		// plugin.cLog.sendMessage(player, "Player:" + player.getName(), 3);
-		// plugin.cLog.sendMessage(player, "World:" + world, 3);
-		// plugin.cLog.sendMessage(player, "X:" + x, 3);
-		// plugin.cLog.sendMessage(player, "Y:" + y, 3);
-		// plugin.cLog.sendMessage(player, "Z:" + z, 3);
-		// plugin.cLog.sendMessage(player, "Yaw:" + yaw, 3);
-		// plugin.cLog.sendMessage(player, "Pitch:" + pitch, 3);
 	}
 
 	public class Time {
