@@ -1,5 +1,6 @@
 package com.github.smk7758.TosoGame_by_smk7758.Files;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -11,10 +12,10 @@ import org.bukkit.plugin.Plugin;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class YamlFileManager {
-	// private Plugin plugin; // TODO
+	private Plugin plugin = null;
 
 	public YamlFileManager(Plugin plugin) {
-		// this.plugin = plugin; // TODO a bit it using
+		this.plugin = plugin;
 	}
 
 	public YamlFile reloadYamlFile(YamlFile file) {
@@ -112,28 +113,52 @@ public class YamlFileManager {
 		}
 	}
 
+	// TODO
 	public void saveYamlFile(YamlFile file) {
 		saveFields(file, file, null);
 	}
 
+	/**
+	 * @param file_object
+	 * @param parent
+	 * @param parent_yaml_path
+	 */
 	private void saveFields(YamlFile file_object, Object parent, String parent_yaml_path) {
 		boolean is_root_class = false;
 		String yaml_path_access;
 		Field[] fields = parent.getClass().getFields();
-		if (parent_yaml_path == null || parent_yaml_path.isEmpty()) is_root_class = true;
-		else parent_yaml_path += ".";
+		if (parent_yaml_path == null || parent_yaml_path.isEmpty()) {
+			is_root_class = true;
+			parent_yaml_path = "";
+		} else {
+			parent_yaml_path += ".";
+		}
 
 		for (Field field : fields) {
 			if (field.isAnnotationPresent(YamlFileExceptField.class)) continue;
 
 			yaml_path_access = parent_yaml_path + field.getName();
+
 			if (isFieldValueType(field)) {
-				file_object.getFileConfiguration().set(yaml_path_access, field);
+				try {
+					SendLog.debug("Path: " + yaml_path_access);
+					SendLog.debug("Data: " + field.get(parent));
+					file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
+				} catch (IllegalArgumentException | IllegalAccessException ex) {
+					ex.printStackTrace();
+				}
 			} else {
 				saveFields(file_object, field, yaml_path_access);
 			}
 		}
+
 		if (is_root_class) file_object.saveField();
+
+		try {
+			file_object.getFileConfiguration().save(file_object.getFile());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	private boolean isFieldValueType(Field field) {
@@ -146,7 +171,14 @@ public class YamlFileManager {
 		else return false;
 	}
 
-	// public void saveDefaultYamlFile(YamlFile file, boolean replace) {
-	// plugin.saveResource(file.getFileName(), replace);
-	// }
+	@Deprecated
+	/**
+	 * "Just for API."
+	 *
+	 * @param file
+	 * @param replace
+	 */
+	public void saveDefaultYamlFile(YamlFile file, boolean replace) {
+		plugin.saveResource(file.getFileName(), replace);
+	}
 }

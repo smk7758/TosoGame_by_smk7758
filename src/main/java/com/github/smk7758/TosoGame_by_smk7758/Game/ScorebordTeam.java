@@ -27,7 +27,7 @@ public class ScorebordTeam {
 		}
 	}
 
-	// staticなんでいつか変更.
+	// TODO: staticなんでいつか変更.
 	public enum TeamName {
 		Hunter("Hunter", "&C"), Runner("Runner", "&A"), RunnerPrisoner("RunnerPrisoner",
 				"&3"), OtherPlayer("OtherPlayer", "&F");
@@ -89,6 +89,7 @@ public class ScorebordTeam {
 	public void setTeam(TeamName name, Player player) {
 		if (player == null) throw new IllegalArgumentException("Player is null.");
 		getTeam(name).addEntry(player.getUniqueId().toString());
+		SendLog.debug(player.getName() + " has been added to Team: " + name.toString());
 	}
 
 	public boolean removeTeam(TeamName name, String player_name) {
@@ -100,6 +101,7 @@ public class ScorebordTeam {
 
 	public void removeTeam(TeamName name, Player player) {
 		getTeam(name).removeEntry(player.getUniqueId().toString());
+		SendLog.debug(player.getName() + " has been removed to Team: " + name.toString());
 	}
 
 	public void removeTeamAll(TeamName name) {
@@ -112,6 +114,22 @@ public class ScorebordTeam {
 		}
 	}
 
-	// 値を保持する。
-	// 値を指定(表示)する。
+	public Set<TeamName> getPlayerTeam(Player player) {
+		Set<TeamName> contain_teamnames = new HashSet<>();
+		for (TeamName name : TeamName.values()) {
+			if (getTeamPlayers(name).contains(player)) {
+				contain_teamnames.add(name);
+			}
+		}
+		return contain_teamnames;
+	}
+
+	public void changeTeam(Player player, TeamName name_to) {
+		getPlayerTeam(player).forEach(name_from -> changeTeam(player, name_to, name_from));
+	}
+
+	public void changeTeam(Player player, TeamName name_to, TeamName name_from) {
+		removeTeam(name_from, player);
+		setTeam(name_to, player);
+	}
 }

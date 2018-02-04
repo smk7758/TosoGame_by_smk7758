@@ -44,19 +44,9 @@ public class GameFile extends YamlFile {
 		SendLog.debug("loadField Method!");
 		GameLength = new Time(getFileConfiguration().getInt("GameLength"));
 
-		// SendLog.debug("GameLength: " + getFileConfiguration().getString("GameLength"));
-		// String[] game_length_splitted = getFileConfiguration().getString("GameLength").split(",");
-		// GameLength = LocalTime.of(Integer.parseInt(game_length_splitted[0]), Integer.parseInt(game_length_splitted[1]));
-
 		prison_loc = getLocation();
 
 		// Players = new HashMap<>();
-		// for (String key : getFileConfiguration().getConfigurationSection("Players").getKeys(false)) {
-		// if (key != null) {
-		// String value = getFileConfiguration().getString(Players.getClass().getName() + "." + key);
-		// Players.put(key, TeamName.valueOf(value));
-		// }
-		// }
 		testFields();
 		// Playersがnull→Players.getClass().getName() x
 	}
@@ -116,5 +106,15 @@ public class GameFile extends YamlFile {
 
 	@Override
 	public void saveField() {
+		saveLocaton();
+	}
+
+	private void saveLocaton() {
+		if (prison_loc == null) return;
+		String path = "Prison.Location";
+		getFileConfiguration().set(path + ".World", prison_loc.getWorld().getName());
+		getFileConfiguration().set(path + ".X", prison_loc.getX());
+		getFileConfiguration().set(path + ".Y", prison_loc.getY());
+		getFileConfiguration().set(path + ".Z", prison_loc.getZ());
 	}
 }

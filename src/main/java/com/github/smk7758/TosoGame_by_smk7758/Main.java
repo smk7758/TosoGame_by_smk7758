@@ -68,10 +68,6 @@ public class Main extends JavaPlugin {
 		return game_manager;
 	}
 
-	public void startGame() {
-		if (!game_manager.getIsGameStarting()) game_manager.start();
-	}
-
 	public Scoreboard getScoreBoard() {
 		return scoreboard;
 	}
@@ -79,6 +75,5 @@ public class Main extends JavaPlugin {
 	public void saveResource(YamlFile file, boolean replace) {
 		if (replace || !file.getFile().exists()) saveResource(file.getFileName(), replace);
 	}
-	// TODO: save config, tab complete, command args, book or chat, after game calling stop
-	// TODO: no pages, no text, dont have book
+	// TODO: save config(PUBLIC?), tab complete, command args, book or chat, after game calling stop
 }

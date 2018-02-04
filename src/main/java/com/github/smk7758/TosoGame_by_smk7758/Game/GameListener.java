@@ -5,15 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
-import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class GameListener implements Listener {
 	private Main main = null;
-	public int wait_time = 10;
 
 	public GameListener(Main main) {
 		this.main = main;
@@ -21,7 +18,7 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void onPlayerAttackPlayer(EntityDamageByEntityEvent event) {
-		if (!main.getGameManager().getIsGameStarting()) return;
+		if (!main.getGameManager().isGameStarting()) return;
 		Entity attacker_ = event.getDamager();
 		Entity damager_ = event.getEntity();
 		if (!(attacker_ instanceof Player && damager_ instanceof Player)) return;
@@ -31,27 +28,7 @@ public class GameListener implements Listener {
 				&& main.getGameManager().getTeamManager().isTeam(TeamName.Runner, damager))) return;
 		// --- finish check ---
 
-		// send mail
-		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Runner)
-				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
-		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.RunnerPrisoner)
-				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
-		main.getGameManager().getTeamManager().getTeamPlayers(TeamName.Hunter)
-				.forEach(runner -> SendLog.send(damager.getName() + " has been cought.", runner));
-
-		// change team
-		main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, damager);
-		main.getGameManager().getTeamManager().setTeam(TeamName.RunnerPrisoner, damager);
-
-		SendLog.send("After " + wait_time + " seconds, you will be teleported to the prison.", damager);
-
-		// TODO if caught.
-
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				damager.teleport(main.getGameManager().gamefile.prison_loc);
-			}
-		}.runTaskLater(main, wait_time * 20);
+		main.getGameManager().caught(damager);
 	}
+
 }

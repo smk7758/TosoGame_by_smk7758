@@ -74,38 +74,61 @@ public class CommandExecuter implements CommandExecutor {
 					showTeam(TeamName.OtherPlayer, sender);
 				}
 			} else if (args[0].equalsIgnoreCase("start")) {
-				main.startGame();
-				SendLog.send("Game has been started.", sender);
-			} else if (args[0].equalsIgnoreCase("stop")) {
-				main.getGameManager().stop();
-			} else if (args[0].equalsIgnoreCase("out")) {
-				if (args.length <= 1) {
-					// TODO
-					return false;
+				if (main.getGameManager().start()) {
+					SendLog.send("Game has been started.", sender);
+				} else {
+					SendLog.error("Can't start the game.", sender);
 				}
-				Player player_out = Bukkit.getPlayer(args[1]);
-				main.getGameManager().getTeamManager().removeTeam(TeamName.Runner, player_out);
-				SendLog.send("You have been out from the TosoGame.", player_out);
-				main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Runner,
-						args[1] + " has been out from the TosoGame.");
-				main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Hunter,
-						args[1] + " has been out from the TosoGame.");
-				// これを条件にするのあり。
+			} else if (args[0].equalsIgnoreCase("stop")) {
+				if (main.getGameManager().stop()) {
+					SendLog.send("Stop command has been success.", sender);
+				} else {
+					SendLog.error("Can't stop the game.", sender);
+				}
+			} else if (args[0].equalsIgnoreCase("out")) {
+				Player player_out = null;
+				if (args.length <= 1) {
+					if (sender instanceof Player) {
+						player_out = (Player) sender;
+					} else {
+						return false;
+					}
+				} else {
+					player_out = Bukkit.getPlayer(args[1]);
+				}
+				main.getGameManager().out(player_out);
+			} else if (args[0].equalsIgnoreCase("caught")) {
+				Player player_out = null;
+				if (args.length <= 1) {
+					if (sender instanceof Player) {
+						player_out = (Player) sender;
+					} else {
+						return false;
+					}
+				} else {
+					player_out = Bukkit.getPlayer(args[1]);
+				}
+				main.getGameManager().caught(player_out);
+			} else if (args[0].equalsIgnoreCase("addpage")) {
+				if (!main.getGameManager().addNextPage()) SendLog.error("Can't add page to the book.", sender);
+				else SendLog.send("The book has been added from the file.", sender);
 			} else if (args[0].equalsIgnoreCase("save")) {
 				main.getYamlFileManager().saveYamlFile(main.configfile);
 				main.getYamlFileManager().saveYamlFile(main.gamefile);
+				SendLog.send("Save has been compleated.", sender);
 			} else if (args[0].equalsIgnoreCase("reload")) {
 				main.getYamlFileManager().reloadYamlFile(main.configfile);
 				main.getYamlFileManager().reloadYamlFile(main.gamefile);
-			} else if (args[0].equalsIgnoreCase("addbook")) {
-				if (!main.getGameManager().addNextPage()) SendLog.error("Can't add page to the book.", sender);
-				else SendLog.send("The book has been added from the file.", sender);
+				SendLog.send("Reload has been compleated.", sender);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				showCommandList(sender);
+			} else if (args[0].equalsIgnoreCase("test")) {
+				SendLog.send("test!", sender);
 			}
 			return true;
 		}
 		return false;
+
 	}
 
 	public void setTeam(TeamName name, String player_name, CommandSender sender) {
