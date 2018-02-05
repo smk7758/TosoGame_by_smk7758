@@ -3,6 +3,7 @@ package com.github.smk7758.TosoGame_by_smk7758.Files;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -50,8 +51,9 @@ public class YamlFileManager {
 
 		for (Field field : fields) {
 			SendLog.debug(field.getName() + " | " + field.getType() + " | " + field.getGenericType());
-			// アノテーション付きを弾く。
-			if (field.isAnnotationPresent(YamlFileExceptField.class)) continue;
+			// アノテーション付き, finalフィールド(メンバー)を弾く。
+			if (field.isAnnotationPresent(YamlFileExceptField.class)
+					|| Modifier.isFinal(field.getModifiers())) continue;
 
 			// TODO: テスト必要。
 			yaml_path_access = parent_yaml_path + field.getName();
@@ -67,6 +69,10 @@ public class YamlFileManager {
 			} else if (field.getType().equals(double.class)) {
 				SendLog.debug("double: " + yaml_path_access);
 				object = file_object.getFileConfiguration().getDouble(yaml_path_access);
+				setField(parent, field, object);
+			} else if (field.getType().equals(boolean.class)) {
+				SendLog.debug("boolean: " + yaml_path_access);
+				object = file_object.getFileConfiguration().getBoolean(yaml_path_access);
 				setField(parent, field, object);
 			} else if (field.getType().equals(List.class)) {
 				if (field.getGenericType() instanceof ParameterizedType) {
@@ -135,7 +141,10 @@ public class YamlFileManager {
 		}
 
 		for (Field field : fields) {
-			if (field.isAnnotationPresent(YamlFileExceptField.class)) continue;
+			SendLog.debug("Field: " + field.getName());
+			// アノテーション付き, finalフィールド(メンバー)を弾く。, final除去は謎フィールドを防ぐ(Memderのフィールド)。
+			if (field.isAnnotationPresent(YamlFileExceptField.class)
+					|| Modifier.isFinal(field.getModifiers())) continue;
 
 			yaml_path_access = parent_yaml_path + field.getName();
 

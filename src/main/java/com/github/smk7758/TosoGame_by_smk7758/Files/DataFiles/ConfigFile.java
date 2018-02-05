@@ -7,7 +7,7 @@ import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
 
 public class ConfigFile extends YamlFile {
 	private final String file_name = "config.yml"; // TODO final じゃないといけない！！
-	boolean DebugMode = false;
+	public boolean DebugMode = false;
 	public Hunter Hunter;
 	public Runner Runner;
 	public OtherPlayer OtherPlayer;

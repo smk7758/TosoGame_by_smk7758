@@ -119,8 +119,10 @@ public class CommandExecuter implements CommandExecutor {
 				SendLog.send(main.languagefile.reloadCommand, sender);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				showCommandList(sender);
-			} else if (args[0].equalsIgnoreCase("test")) {
-				SendLog.send("test!", sender);
+			} else if (args[0].equalsIgnoreCase("debug")) {
+				main.configfile.DebugMode = Main.debug_mode = !Main.debug_mode;
+				SendLog.send("DebugMode: " + main.configfile.DebugMode, sender);
+				SendLog.debug("test", sender);
 			}
 			return true;
 		}
