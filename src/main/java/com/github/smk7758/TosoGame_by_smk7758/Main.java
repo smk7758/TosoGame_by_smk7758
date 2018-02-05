@@ -8,6 +8,7 @@ import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
 import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFileManager;
 import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.ConfigFile;
 import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.GameFile;
+import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.LanguageFile;
 import com.github.smk7758.TosoGame_by_smk7758.Game.Game;
 import com.github.smk7758.TosoGame_by_smk7758.Game.GameListener;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
@@ -22,6 +23,7 @@ public class Main extends JavaPlugin {
 	private YamlFileManager yfm = null;
 	public ConfigFile configfile = null;
 	public GameFile gamefile = null;
+	public LanguageFile languagefile = null;
 
 	@Override
 	public void onEnable() {
@@ -33,15 +35,19 @@ public class Main extends JavaPlugin {
 		SendLog.debug("start config file!");
 
 		configfile = new ConfigFile(this);
-		saveResource(configfile.getFileName(), false);
+		saveResource(configfile, false);
 		configfile = (ConfigFile) yfm.reloadYamlFile(configfile);
 		// !!! yfm.saveDefaultYamlFile(config_file, false);
 
 		gamefile = new GameFile(this);
-		saveResource(gamefile.getFileName(), false);
+		saveResource(gamefile, false);
 		gamefile = (GameFile) yfm.reloadYamlFile(gamefile);
-		// !!! yfm.saveDefaultYamlFile(game_file, false);
 
+		languagefile = new LanguageFile(this);
+		saveResource(languagefile, false);
+		languagefile = (LanguageFile) yfm.reloadYamlFile(languagefile);
+
+		// !!! yfm.saveDefaultYamlFile(game_file, false);
 		// reloadFiles(); // load field to class object.
 
 		game_manager = new Game(this);

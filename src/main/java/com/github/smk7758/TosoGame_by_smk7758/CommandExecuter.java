@@ -21,7 +21,7 @@ public class CommandExecuter implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("TosoGame")) {
 			if (args.length <= 0) {
-				SendLog.error("Please write arguments.", sender);
+				SendLog.error(main.languagefile.lessCommandArguments, sender);
 				showCommandList(sender);
 				return false;
 			}
@@ -42,7 +42,7 @@ public class CommandExecuter implements CommandExecutor {
 						SendLog.send("Prison has been set to: "
 								+ "x: " + loc.getX() + " y: " + loc.getY() + " z: " + loc.getZ(), sender);
 					} else {
-						SendLog.error("This command must use from player.", sender);
+						SendLog.error(main.languagefile.mustSendFromPlayer, sender);
 						return false;
 					}
 				}
@@ -77,17 +77,11 @@ public class CommandExecuter implements CommandExecutor {
 					SendLog.send("Z:" + main.gamefile.prison_loc.getZ());
 				}
 			} else if (args[0].equalsIgnoreCase("start")) {
-				if (main.getGameManager().start()) {
-					SendLog.send("Game has been started.", sender);
-				} else {
-					SendLog.error("Can't start the game.", sender);
-				}
+				if (main.getGameManager().start()) SendLog.send(main.languagefile.startCommand, sender);
+				else SendLog.error(main.languagefile.startCommandError, sender);
 			} else if (args[0].equalsIgnoreCase("stop")) {
-				if (main.getGameManager().stop()) {
-					SendLog.send("Stop command has been success.", sender);
-				} else {
-					SendLog.error("Can't stop the game.", sender);
-				}
+				if (main.getGameManager().stop()) SendLog.send(main.languagefile.stopCommand, sender);
+				else SendLog.error(main.languagefile.stopCommandError, sender);
 			} else if (args[0].equalsIgnoreCase("out")) {
 				Player player_out = null;
 				if (args.length <= 1) {
@@ -113,16 +107,16 @@ public class CommandExecuter implements CommandExecutor {
 				}
 				main.getGameManager().caught(player_out);
 			} else if (args[0].equalsIgnoreCase("addpage")) {
-				if (!main.getGameManager().addNextPage()) SendLog.error("Can't add page to the book.", sender);
-				else SendLog.send("The book has been added from the file.", sender);
+				if (main.getGameManager().addNextPage()) SendLog.send(main.languagefile.addBook, sender);
+				else SendLog.error(main.languagefile.addBookError, sender);
 			} else if (args[0].equalsIgnoreCase("save")) {
 				main.getYamlFileManager().saveYamlFile(main.configfile);
 				main.getYamlFileManager().saveYamlFile(main.gamefile);
-				SendLog.send("Save has been compleated.", sender);
+				SendLog.send(main.languagefile.saveCommand, sender);
 			} else if (args[0].equalsIgnoreCase("reload")) {
 				main.getYamlFileManager().reloadYamlFile(main.configfile);
 				main.getYamlFileManager().reloadYamlFile(main.gamefile);
-				SendLog.send("Reload has been compleated.", sender);
+				SendLog.send(main.languagefile.reloadCommand, sender);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				showCommandList(sender);
 			} else if (args[0].equalsIgnoreCase("test")) {
@@ -135,14 +129,18 @@ public class CommandExecuter implements CommandExecutor {
 
 	public void setTeam(TeamName name, String player_name, CommandSender sender) {
 		boolean success = main.getGameManager().getTeamManager().setTeam(name, player_name);
-		if (success) SendLog.send(player_name + " has been added to Team: " + name.toString(), sender);
-		else SendLog.error("Can't add " + player_name + " to Team: " + name.toString(), sender);
+		if (success) SendLog.send(main.languagefile.convertText(main.languagefile.setTeam, sender, "%Player%",
+				player_name, "%Team%", name.toString()), sender);
+		else SendLog.error(main.languagefile.convertText(main.languagefile.setTeamError, sender, "%Player%",
+				player_name, "%Team%", name.toString()), sender);
 	}
 
 	public void removeTeam(TeamName name, String player_name, CommandSender sender) {
 		boolean success = main.getGameManager().getTeamManager().removeTeam(name, player_name);
-		if (success) SendLog.send(player_name + " has been removed from Team: " + name.toString(), sender);
-		else SendLog.error("Can't remove " + player_name + " from Team: " + name.toString(), sender);
+		if (success) SendLog.send(main.languagefile.convertText(main.languagefile.removeTeam, sender, "%Player%",
+				player_name, "%Team%", name.toString()), sender);
+		else SendLog.error(main.languagefile.convertText(main.languagefile.removeTeamError, sender, "%Player%",
+				player_name, "%Team%", name.toString()), sender);
 	}
 
 	public void showTeam(TeamName name, CommandSender sender) {

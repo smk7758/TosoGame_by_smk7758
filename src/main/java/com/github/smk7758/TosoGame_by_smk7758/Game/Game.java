@@ -57,8 +57,8 @@ public class Game {
 		finish();
 
 		// send start!
-		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGame Start!");
-		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Start!");
+		team_manager.sendTeamPlayers(TeamName.Hunter, main.languagefile.startToHunter);
+		team_manager.sendTeamPlayers(TeamName.Runner, main.languagefile.startToRunner);
 		return true;
 	}
 
@@ -88,8 +88,9 @@ public class Game {
 			@Override
 			public void run() {
 				if (isGameStarting()) {
-					team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGame Finished!");
-					team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Finished!");
+					team_manager.sendTeamPlayers(TeamName.Hunter, main.languagefile.finishByTimeToHunter);
+					team_manager.sendTeamPlayers(TeamName.Runner, main.languagefile.finishByTimeToRunner);
+					team_manager.sendTeamPlayers(TeamName.RunnerPrisoner, main.languagefile.finishByTimeToRunner);
 					close();
 				}
 			}
@@ -99,16 +100,17 @@ public class Game {
 	public boolean finishByCaught() {
 		// TODO: 直で出すのはなんか物足りない。
 		if (!isGameStarting()) return false;
-		team_manager.sendTeamPlayers(TeamName.Hunter, "All players have been caught. TosoGame Finished!");
-		team_manager.sendTeamPlayers(TeamName.Runner, "All players have been caught. TosoGame Finished!");
+		team_manager.sendTeamPlayers(TeamName.Hunter, main.languagefile.finishByCaughtToHunter);
+		team_manager.sendTeamPlayers(TeamName.Runner, main.languagefile.finishByCaughtToRunner);
+		team_manager.sendTeamPlayers(TeamName.RunnerPrisoner, main.languagefile.finishByCaughtToRunner);
 		close();
 		return true;
 	}
 
 	public boolean stop() {
 		if (!isGameStarting()) return false;
-		team_manager.sendTeamPlayers(TeamName.Hunter, "TosoGame Stop!");
-		team_manager.sendTeamPlayers(TeamName.Runner, "TosoGame Stop!");
+		team_manager.sendTeamPlayers(TeamName.Hunter, main.languagefile.stop);
+		team_manager.sendTeamPlayers(TeamName.Runner, main.languagefile.stop);
 		close();
 		return true;
 	}
@@ -130,19 +132,23 @@ public class Game {
 	public void caught(Player player) {
 		if (!isGameStarting()) return;
 		SendLog.debug("Player: " + player.getName() + " has been caught.");
+		// send to player
+		SendLog.send(main.languagefile.convertText(main.languagefile.catchRunnerToPlayer, player), player);
 		// send mail
-		getTeamManager().getTeamPlayers(TeamName.Runner)
-				.forEach(player_send -> SendLog.send(player.getName() + " has been caught.", player_send));
-		getTeamManager().getTeamPlayers(TeamName.RunnerPrisoner)
-				.forEach(player_send -> SendLog.send(player.getName() + " has been caught.", player_send));
-		getTeamManager().getTeamPlayers(TeamName.Hunter)
-				.forEach(player_send -> SendLog.send(player.getName() + " has been caught.", player_send));
+		getTeamManager().sendTeamPlayers(TeamName.Hunter,
+				main.languagefile.convertText(main.languagefile.catchRunnerToOthers, player));
+		getTeamManager().sendTeamPlayers(TeamName.Runner,
+				main.languagefile.convertText(main.languagefile.catchRunnerToOthers, player));
+		getTeamManager().sendTeamPlayers(TeamName.RunnerPrisoner,
+				main.languagefile.convertText(main.languagefile.catchRunnerToOthers, player));
 
 		// change team
 		getTeamManager().changeTeam(player, TeamName.RunnerPrisoner);
 
 		// teleport
-		SendLog.send("After " + wait_time + " seconds, you will be teleported to the prison.", player);
+		SendLog.send(
+				main.languagefile.convertText(main.languagefile.catchRunnerWaitTeleportToPlayer, player, wait_time),
+				player);
 		teleportDelay(player);
 	}
 
@@ -150,12 +156,12 @@ public class Game {
 		if (!isGameStarting()) return;
 		getTeamManager().changeTeam(player, TeamName.OtherPlayer);
 		SendLog.debug("Player: " + player.getName() + " has been out.");
-		SendLog.send("You have been out from the TosoGame.", player);
+		SendLog.send(main.languagefile.convertText(main.languagefile.outRunnerToPlayer, player), player);
 
-		main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Runner,
-				player.getName() + " has been out from the TosoGame.");
-		main.getGameManager().getTeamManager().sendTeamPlayers(TeamName.Hunter,
-				player.getName() + " has been out from the TosoGame.");
+		getTeamManager().sendTeamPlayers(TeamName.Runner,
+				main.languagefile.convertText(main.languagefile.outRunnerToOthers, player));
+		getTeamManager().sendTeamPlayers(TeamName.Hunter,
+				main.languagefile.convertText(main.languagefile.outRunnerToOthers, player));
 	}
 
 	private void teleportDelay(Player damager) {
@@ -184,12 +190,12 @@ public class Game {
 		boolean can_start = true;
 		if (isGameStarting()) can_start = false;
 		if (gamefile.prison_loc == null) {
-			SendLog.warn("Please set prison loc!");
+			SendLog.error(main.languagefile.startCheckNotSetPrison);
 			can_start = false;
 		}
 		if (0 == team_manager.getTeamPlayers(TeamName.Runner).size()
 				|| 0 == team_manager.getTeamPlayers(TeamName.Hunter).size()) {
-			SendLog.error("No player is inside the game. Please set players to runner and hunter.");
+			SendLog.error(main.languagefile.startCheckNoPlayers);
 			can_start = false;
 		}
 		return can_start;
