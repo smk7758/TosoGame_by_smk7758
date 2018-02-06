@@ -1,27 +1,37 @@
 package com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import org.bukkit.plugin.Plugin;
 
 import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFile;
+import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
+import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class ConfigFile extends YamlFile {
 	private final String file_name = "config.yml"; // TODO final じゃないといけない！！
 	public boolean DebugMode = false;
 	public Hunter Hunter;
 	public Runner Runner;
+	public RunnerPrisoner RunnerPrisoner;
 	public OtherPlayer OtherPlayer;
 
-	public class Hunter {
-		public String Prefix;
+	public class Player {
+		public String Prefix, DisplayName;
 	}
 
-	public class Runner {
-		public String Prefix;
+	public class Hunter extends Player {
 	}
 
-	public class OtherPlayer {
-		public String Prefix;
+	public class Runner extends Player {
+	}
+
+	public class RunnerPrisoner extends Player {
+	}
+
+	public class OtherPlayer extends Player {
 	}
 
 	public ConfigFile(Plugin plugin) {
@@ -36,6 +46,47 @@ public class ConfigFile extends YamlFile {
 	@Override
 	public void loadField() {
 		Main.debug_mode = DebugMode;
+		// loadPlayers();
+	}
+
+	// TODO
+	public void loadPlayers() {
+		try {
+			for (TeamName teamname : TeamName.values()) {
+				SendLog.debug("TeamName: " + teamname.toString());
+				Field field_class = this.getClass().getField(teamname.toString());
+				SendLog.debug("ClassName: " + field_class.getName());
+				for (Field field_class_field : field_class.getClass().getFields()) {
+					SendLog.debug("ClassField: " + field_class_field.getName());
+					if (Modifier.isFinal(field_class_field.getModifiers())) {
+						SendLog.debug("is final!");
+						continue;
+					} else {
+						SendLog.debug("not final!");
+						teamname.getClass().getField(field_class_field.getName()).set(teamname,
+								field_class_field.get(field_class));
+					}
+				}
+			}
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+			ex.printStackTrace();
+		}
+		// for (TeamName teamname : TeamName.values()) {
+		// Field field_class = this.getClass().getField(teamname.toString());
+		// SendLog.debug("ClassName: " + field_class.getName());
+		// for (Field field_teamname : teamname.getClass().getFields()) {
+		// SendLog.debug("TeamNameField: " + field_teamname.getName());
+		// Field field_class_field = field_class.getClass().getField(field_teamname.getName());
+		// SendLog.debug("ClassField: " + field_class_field.getName());
+		// field_teamname.set(teamname, field_class_field.get(field_class));
+		// }
+		// }
+	}
+
+	public void testPlayers() {
+		SendLog.debug("TEST Players in ConfigFile.");
+		SendLog.debug(TeamName.Hunter.displayname);
+		SendLog.debug(TeamName.Hunter.prefix);
 	}
 
 	@Override

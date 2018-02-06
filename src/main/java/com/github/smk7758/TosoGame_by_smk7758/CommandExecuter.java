@@ -123,6 +123,11 @@ public class CommandExecuter implements CommandExecutor {
 				main.configfile.DebugMode = Main.debug_mode = !Main.debug_mode;
 				SendLog.send("DebugMode: " + main.configfile.DebugMode, sender);
 				SendLog.debug("test", sender);
+			} else if (args[0].equalsIgnoreCase("test0")) {
+				main.configfile.testPlayers();
+				main.configfile.loadPlayers();
+				main.configfile.testPlayers();
+			} else if (args[0].equalsIgnoreCase("test1")) {
 			}
 			return true;
 		}

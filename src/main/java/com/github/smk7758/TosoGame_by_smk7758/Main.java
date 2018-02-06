@@ -81,5 +81,6 @@ public class Main extends JavaPlugin {
 	public void saveResource(YamlFile file, boolean replace) {
 		if (replace || !file.getFile().exists()) saveResource(file.getFileName(), replace);
 	}
-	// TODO: save config(PUBLIC?), tab complete, command args, book or chat, recalling?reusing? the game
+	// TODO: tab complete, command args, book or chat, recalling?reusing? the game, config use!, config if none!
+	// DONE: config, 0.0.6.3間違えた！
 }

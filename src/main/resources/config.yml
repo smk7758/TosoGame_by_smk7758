@@ -1,7 +1,13 @@
 DebugMode: false
 Hunter:
-  Prefix: "&C"
+  Prefix: '&C'
+  DisplayName: 'Hunter'
 Runner:
-  Prefix: "&A"
+  Prefix: '&A'
+  DisplayName: 'Runner'
+RunnerPrisoner:
+  Prefix: '&A'
+  DisplayName: 'RunnerPrisoner'
 OtherPlayer:
-  Prefix: "&F"
+  Prefix: '&F'
+  DisplayName: 'OtherPlayer'  

@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.plugin.Plugin;
@@ -132,6 +133,10 @@ public class YamlFileManager {
 	private void saveFields(YamlFile file_object, Object parent, String parent_yaml_path) {
 		boolean is_root_class = false;
 		String yaml_path_access;
+		if (file_object == null || parent == null) {
+			SendLog.debug("Which objects are null.");
+			return;
+		}
 		Field[] fields = parent.getClass().getFields();
 		if (parent_yaml_path == null || parent_yaml_path.isEmpty()) {
 			is_root_class = true;
@@ -151,21 +156,55 @@ public class YamlFileManager {
 			if (isFieldValueType(field)) {
 				try {
 					SendLog.debug("Path: " + yaml_path_access);
-					SendLog.debug("Data: " + field.get(parent).toString());
-					file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
+					Object object = null;
+					if (field != null && (object = field.get(parent)) != null) {
+						SendLog.debug("Data: " + field.get(parent).toString());
+						file_object.getFileConfiguration().set(yaml_path_access, object);
+					} else {
+						SendLog.debug("Data: null");
+						file_object.getFileConfiguration().set(yaml_path_access, "");
+					}
 				} catch (IllegalArgumentException | IllegalAccessException ex) {
 					ex.printStackTrace();
 				}
-			} else if (field.getType().equals(List.class) && field.getGenericType().equals(String.class)) {
-				try {
-					SendLog.debug("Path: " + yaml_path_access);
-					SendLog.debug("Data: " + field.get(parent));
-					file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
-				} catch (IllegalArgumentException | IllegalAccessException ex) {
-					ex.printStackTrace();
+			} else if (field.getType().equals(List.class)) {
+				// TODO
+				if (field.getGenericType() instanceof ParameterizedType) {
+					ParameterizedType ptype = (ParameterizedType) field.getGenericType();
+					SendLog.debug("List<String>: " + yaml_path_access);
+					SendLog.debug(ptype.getTypeName() + " | " + ptype.getRawType());
+					for (Type ptype_arg : ptype.getActualTypeArguments()) {
+						SendLog.debug("pType arg: " + ptype_arg.getTypeName());
+						if (ptype_arg.equals(String.class)) {
+							try {
+								SendLog.debug("Path: " + yaml_path_access);
+								Object object = null;
+								if (field != null && (object = field.get(parent)) != null) {
+									SendLog.debug("Data: " + field.get(parent));
+									for (Field next : field.getClass().getFields()) {
+										SendLog.debug("FieldDataNext: " + next.getName());
+										// TODO
+									}
+									file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
+								} else {
+									// Maybe don't need this.
+									SendLog.debug("Data: null");
+									List<String> empty_list = new ArrayList<>();
+									empty_list.add("");
+									file_object.getFileConfiguration().set(yaml_path_access, empty_list);
+								}
+							} catch (IllegalArgumentException | IllegalAccessException ex) {
+								ex.printStackTrace();
+							}
+						}
+					}
 				}
 			} else {
-				saveFields(file_object, field, yaml_path_access);
+				try {
+					saveFields(file_object, field.get(file_object), yaml_path_access);
+				} catch (IllegalArgumentException | IllegalAccessException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 
