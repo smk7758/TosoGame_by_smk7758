@@ -11,7 +11,6 @@ import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.GameFile;
 import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.LanguageFile;
 import com.github.smk7758.TosoGame_by_smk7758.Game.Game;
 import com.github.smk7758.TosoGame_by_smk7758.Game.GameListener;
-import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class Main extends JavaPlugin {
 	public static final String plugin_name = "TosoGame_by_smk7758";
@@ -31,24 +30,22 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(game_listner, this);
 		getCommand("TosoGame").setExecutor(command_executer);
 		scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-		yfm = new YamlFileManager(this);
-		SendLog.debug("start config file!");
 
 		configfile = new ConfigFile(this);
 		saveResource(configfile, false);
-		configfile = (ConfigFile) yfm.reloadYamlFile(configfile);
+		configfile = (ConfigFile) YamlFileManager.reloadYamlFile(configfile);
 		// !!! yfm.saveDefaultYamlFile(config_file, false);
 
 		gamefile = new GameFile(this);
 		saveResource(gamefile, false);
-		gamefile = (GameFile) yfm.reloadYamlFile(gamefile);
+		gamefile = (GameFile) YamlFileManager.reloadYamlFile(gamefile);
 
 		languagefile = new LanguageFile(this);
 		saveResource(languagefile, false);
-		languagefile = (LanguageFile) yfm.reloadYamlFile(languagefile);
+		languagefile = (LanguageFile) YamlFileManager.reloadYamlFile(languagefile);
 
 		// !!! yfm.saveDefaultYamlFile(game_file, false);
-		// reloadFiles(); // load field to class object.
+		reloadFiles(); // load field to class object.
 
 		game_manager = new Game(this);
 	}
@@ -58,8 +55,8 @@ public class Main extends JavaPlugin {
 	}
 
 	public void reloadFiles() {
-		configfile = (ConfigFile) yfm.reloadYamlFile(configfile);
-		gamefile = (GameFile) yfm.reloadYamlFile(gamefile);
+		configfile = (ConfigFile) YamlFileManager.reloadYamlFile(configfile);
+		gamefile = (GameFile) YamlFileManager.reloadYamlFile(gamefile);
 	}
 
 	public YamlFileManager getYamlFileManager() {
@@ -81,6 +78,6 @@ public class Main extends JavaPlugin {
 	public void saveResource(YamlFile file, boolean replace) {
 		if (replace || !file.getFile().exists()) saveResource(file.getFileName(), replace);
 	}
-	// TODO: tab complete, command args, book or chat, recalling?reusing? the game, config use!, config if none!
-	// DONE: config, 0.0.6.3間違えた！
+	// TODO: tab complete, book or chat, recalling?reusing? the game
+	// DONE: config
 }

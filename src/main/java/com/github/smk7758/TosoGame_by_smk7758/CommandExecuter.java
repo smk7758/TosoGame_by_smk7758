@@ -7,8 +7,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.github.smk7758.TosoGame_by_smk7758.Files.YamlFileManager;
 import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
+import com.github.smk7758.TosoGame_by_smk7758.Util.Utilities;
 
 public class CommandExecuter implements CommandExecutor {
 	public Main main = null;
@@ -110,17 +112,19 @@ public class CommandExecuter implements CommandExecutor {
 				if (main.getGameManager().addNextPage()) SendLog.send(main.languagefile.addBook, sender);
 				else SendLog.error(main.languagefile.addBookError, sender);
 			} else if (args[0].equalsIgnoreCase("save")) {
-				main.getYamlFileManager().saveYamlFile(main.configfile);
-				main.getYamlFileManager().saveYamlFile(main.gamefile);
+				YamlFileManager.saveYamlFile(main.configfile);
+				YamlFileManager.saveYamlFile(main.gamefile);
 				SendLog.send(main.languagefile.saveCommand, sender);
 			} else if (args[0].equalsIgnoreCase("reload")) {
-				main.getYamlFileManager().reloadYamlFile(main.configfile);
-				main.getYamlFileManager().reloadYamlFile(main.gamefile);
+				YamlFileManager.reloadYamlFile(main.configfile);
+				YamlFileManager.reloadYamlFile(main.gamefile);
 				SendLog.send(main.languagefile.reloadCommand, sender);
 			} else if (args[0].equalsIgnoreCase("help")) {
 				showCommandList(sender);
 			} else if (args[0].equalsIgnoreCase("debug")) {
-				main.configfile.DebugMode = Main.debug_mode = !Main.debug_mode;
+				if (!(args.length > 2 && args[1].equalsIgnoreCase("now"))) {
+					main.configfile.DebugMode = Main.debug_mode = !Main.debug_mode;
+				}
 				SendLog.send("DebugMode: " + main.configfile.DebugMode, sender);
 				SendLog.debug("test", sender);
 			} else if (args[0].equalsIgnoreCase("test0")) {
@@ -128,6 +132,10 @@ public class CommandExecuter implements CommandExecutor {
 				main.configfile.loadPlayers();
 				main.configfile.testPlayers();
 			} else if (args[0].equalsIgnoreCase("test1")) {
+			} else {
+				SendLog.error(main.languagefile.lessCommandArguments, sender);
+				showCommandList(sender);
+				return false;
 			}
 			return true;
 		}
@@ -136,17 +144,17 @@ public class CommandExecuter implements CommandExecutor {
 
 	public void setTeam(TeamName name, String player_name, CommandSender sender) {
 		boolean success = main.getGameManager().getTeamManager().setTeam(name, player_name);
-		if (success) SendLog.send(main.languagefile.convertText(main.languagefile.setTeam, sender, "%Player%",
+		if (success) SendLog.send(Utilities.convertText(main.languagefile.setTeam, sender, "%Player%",
 				player_name, "%Team%", name.toString()), sender);
-		else SendLog.error(main.languagefile.convertText(main.languagefile.setTeamError, sender, "%Player%",
+		else SendLog.error(Utilities.convertText(main.languagefile.setTeamError, sender, "%Player%",
 				player_name, "%Team%", name.toString()), sender);
 	}
 
 	public void removeTeam(TeamName name, String player_name, CommandSender sender) {
 		boolean success = main.getGameManager().getTeamManager().removeTeam(name, player_name);
-		if (success) SendLog.send(main.languagefile.convertText(main.languagefile.removeTeam, sender, "%Player%",
+		if (success) SendLog.send(Utilities.convertText(main.languagefile.removeTeam, sender, "%Player%",
 				player_name, "%Team%", name.toString()), sender);
-		else SendLog.error(main.languagefile.convertText(main.languagefile.removeTeamError, sender, "%Player%",
+		else SendLog.error(Utilities.convertText(main.languagefile.removeTeamError, sender, "%Player%",
 				player_name, "%Team%", name.toString()), sender);
 	}
 

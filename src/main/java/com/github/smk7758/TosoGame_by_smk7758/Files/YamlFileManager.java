@@ -9,18 +9,14 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.plugin.Plugin;
-
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
 
 public class YamlFileManager {
-	private Plugin plugin = null;
 
-	public YamlFileManager(Plugin plugin) {
-		this.plugin = plugin;
+	private YamlFileManager() {
 	}
 
-	public YamlFile reloadYamlFile(YamlFile file) {
+	public static YamlFile reloadYamlFile(YamlFile file) {
 		file.reloadFileConfiguration();
 		return loadFields(file, file, null);
 	}
@@ -32,10 +28,9 @@ public class YamlFileManager {
 	 * @param parent 取得するFieldを持ったObject?
 	 * @param parent_yaml_path YamlFileの保存する親のパス。親パスが無い時はnull。
 	 */
-	private YamlFile loadFields(YamlFile file_object, Object parent, String parent_yaml_path) {
+	private static YamlFile loadFields(YamlFile file_object, Object parent, String parent_yaml_path) {
 		if (file_object == null || parent == null) throw new IllegalArgumentException(
 				"FileObject: " + file_object + " | Parent: " + parent);
-		// TODO
 
 		boolean is_root_class = false; // YamlFileのObject=rootのclassのObjectであるか。
 		String yaml_path_access = ""; // for文で更新され、実際のYAMLファイルに探しに行くパス。
@@ -112,7 +107,7 @@ public class YamlFileManager {
 		return file_object;
 	}
 
-	private void setField(Object dest_class_object, Field field, Object set_object) {
+	private static void setField(Object dest_class_object, Field field, Object set_object) {
 		if (dest_class_object == null || field == null) throw new IllegalArgumentException("agrument is null.");
 		try {
 			field.set(dest_class_object, set_object);
@@ -121,7 +116,8 @@ public class YamlFileManager {
 		}
 	}
 
-	public void saveYamlFile(YamlFile file) {
+	public static void saveYamlFile(YamlFile file) {
+		SendLog.send(file.getFileName() + " save.");
 		saveFields(file, file, null);
 	}
 
@@ -130,7 +126,7 @@ public class YamlFileManager {
 	 * @param parent
 	 * @param parent_yaml_path
 	 */
-	private void saveFields(YamlFile file_object, Object parent, String parent_yaml_path) {
+	private static void saveFields(YamlFile file_object, Object parent, String parent_yaml_path) {
 		boolean is_root_class = false;
 		String yaml_path_access;
 		if (file_object == null || parent == null) {
@@ -180,18 +176,12 @@ public class YamlFileManager {
 								SendLog.debug("Path: " + yaml_path_access);
 								Object object = null;
 								if (field != null && (object = field.get(parent)) != null) {
-									SendLog.debug("Data: " + field.get(parent));
-									for (Field next : field.getClass().getFields()) {
-										SendLog.debug("FieldDataNext: " + next.getName());
-										// TODO
-									}
-									file_object.getFileConfiguration().set(yaml_path_access, field.get(parent));
+									SendLog.debug("Data(List<String>): " + object);
+									file_object.getFileConfiguration().set(yaml_path_access, object);
 								} else {
 									// Maybe don't need this.
 									SendLog.debug("Data: null");
-									List<String> empty_list = new ArrayList<>();
-									empty_list.add("");
-									file_object.getFileConfiguration().set(yaml_path_access, empty_list);
+									file_object.getFileConfiguration().set(yaml_path_access, new ArrayList<>());
 								}
 							} catch (IllegalArgumentException | IllegalAccessException ex) {
 								ex.printStackTrace();
@@ -217,23 +207,12 @@ public class YamlFileManager {
 		}
 	}
 
-	private boolean isFieldValueType(Field field) {
+	private static boolean isFieldValueType(Field field) {
 		if (field.getType().equals(String.class)
 				|| field.getType().equals(int.class)
 				|| field.getType().equals(double.class)
 				|| field.getType().equals(float.class)
 				|| field.getType().equals(boolean.class)) return true;
 		else return false;
-	}
-
-	@Deprecated
-	/**
-	 * "Just for API."
-	 *
-	 * @param file
-	 * @param replace
-	 */
-	public void saveDefaultYamlFile(YamlFile file, boolean replace) {
-		plugin.saveResource(file.getFileName(), replace);
 	}
 }

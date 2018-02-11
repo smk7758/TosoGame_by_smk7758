@@ -23,15 +23,10 @@ public class GameFile extends YamlFile {
 	@YamlFileExceptField
 	public Location prison_loc;
 	public Book Book;
-	public Test test;
 
 	public class Book {
 		public String Name, Title, FolderName;
 		public List<String> Lore, PageTextFiles;
-	}
-
-	public class Test {
-		public String test_name;
 	}
 
 	public GameFile(Plugin plugin) {
@@ -52,7 +47,7 @@ public class GameFile extends YamlFile {
 		prison_loc = getLocation();
 
 		// Players = new HashMap<>();
-		testFields();
+		// testFields();
 		// Playersがnull→Players.getClass().getName() x
 	}
 

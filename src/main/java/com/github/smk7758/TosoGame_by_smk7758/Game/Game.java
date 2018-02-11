@@ -14,6 +14,7 @@ import com.github.smk7758.TosoGame_by_smk7758.Main;
 import com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles.GameFile;
 import com.github.smk7758.TosoGame_by_smk7758.Game.ScorebordTeam.TeamName;
 import com.github.smk7758.TosoGame_by_smk7758.Util.SendLog;
+import com.github.smk7758.TosoGame_by_smk7758.Util.Utilities;
 
 public class Game {
 	private Main main = null;
@@ -32,14 +33,14 @@ public class Game {
 
 	public Game(Main main) {
 		this.main = main;
-		team_manager = new ScorebordTeam(main);
 		this.gamefile = main.gamefile; // TODO
+		team_manager = new ScorebordTeam(main);
+		bfm = new BookManager(main, gamefile);
 	}
 
 	public boolean start() {
 		if (!canStart()) return false;
 
-		bfm = new BookManager(main, gamefile);
 		time_count = gamefile.GameLength.getAsSecond();
 		// wait_time = gamefile.WaitTeleportTime
 		sidebar = new Sidebar(main, time_count, team_manager.getAllRunner().size(),
@@ -133,14 +134,14 @@ public class Game {
 		if (!isGameStarting()) return;
 		SendLog.debug("Player: " + player.getName() + " has been caught.");
 		// send to player
-		SendLog.send(main.languagefile.convertText(main.languagefile.catchRunnerToPlayer, player), player);
+		SendLog.send(Utilities.convertText(main.languagefile.catchRunnerToPlayer, player), player);
 		// send mail
 		getTeamManager().sendTeamPlayers(TeamName.Hunter,
-				main.languagefile.convertText(main.languagefile.catchRunnerToOthers, player));
+				Utilities.convertText(main.languagefile.catchRunnerToOthers, player));
 		getTeamManager().sendTeamPlayers(TeamName.Runner,
-				main.languagefile.convertText(main.languagefile.catchRunnerToOthers, player));
+				Utilities.convertText(main.languagefile.catchRunnerToOthers, player));
 		getTeamManager().sendTeamPlayers(TeamName.RunnerPrisoner,
-				main.languagefile.convertText(main.languagefile.catchRunnerToOthers, player));
+				Utilities.convertText(main.languagefile.catchRunnerToOthers, player));
 
 		// change team
 		getTeamManager().changeTeam(player, TeamName.RunnerPrisoner);
@@ -156,12 +157,12 @@ public class Game {
 		if (!isGameStarting()) return;
 		getTeamManager().changeTeam(player, TeamName.OtherPlayer);
 		SendLog.debug("Player: " + player.getName() + " has been out.");
-		SendLog.send(main.languagefile.convertText(main.languagefile.outRunnerToPlayer, player), player);
+		SendLog.send(Utilities.convertText(main.languagefile.outRunnerToPlayer, player), player);
 
 		getTeamManager().sendTeamPlayers(TeamName.Runner,
-				main.languagefile.convertText(main.languagefile.outRunnerToOthers, player));
+				Utilities.convertText(main.languagefile.outRunnerToOthers, player));
 		getTeamManager().sendTeamPlayers(TeamName.Hunter,
-				main.languagefile.convertText(main.languagefile.outRunnerToOthers, player));
+				Utilities.convertText(main.languagefile.outRunnerToOthers, player));
 	}
 
 	private void teleportDelay(Player damager) {

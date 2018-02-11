@@ -45,6 +45,7 @@ public class BookManager {
 		}
 		book_folder_path = Paths.get(plugin_data_folder_path.toString(), folder_name);
 		if (!isDirectoryExists()) {
+			SendLog.debug("Create Dir.");
 			createDirectory();
 			copyDefaultBookPageTextFile();
 		}

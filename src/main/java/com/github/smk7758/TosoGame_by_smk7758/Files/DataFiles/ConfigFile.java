@@ -1,8 +1,5 @@
 package com.github.smk7758.TosoGame_by_smk7758.Files.DataFiles;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import org.bukkit.plugin.Plugin;
 
 import com.github.smk7758.TosoGame_by_smk7758.Main;
@@ -46,31 +43,45 @@ public class ConfigFile extends YamlFile {
 	@Override
 	public void loadField() {
 		Main.debug_mode = DebugMode;
-		// loadPlayers();
+		loadPlayers();
+		testPlayers();
 	}
 
-	// TODO
 	public void loadPlayers() {
-		try {
-			for (TeamName teamname : TeamName.values()) {
-				SendLog.debug("TeamName: " + teamname.toString());
-				Field field_class = this.getClass().getField(teamname.toString());
-				SendLog.debug("ClassName: " + field_class.getName());
-				for (Field field_class_field : field_class.getClass().getFields()) {
-					SendLog.debug("ClassField: " + field_class_field.getName());
-					if (Modifier.isFinal(field_class_field.getModifiers())) {
-						SendLog.debug("is final!");
-						continue;
-					} else {
-						SendLog.debug("not final!");
-						teamname.getClass().getField(field_class_field.getName()).set(teamname,
-								field_class_field.get(field_class));
-					}
-				}
+		for (TeamName teamname : TeamName.values()) {
+			Object field_object = null;
+			try {
+				field_object = this.getClass().getField(teamname.toString()).get(this);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) {
+				ex.printStackTrace();
 			}
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-			ex.printStackTrace();
+			if (field_object instanceof Player) {
+				Player player_object = (Player) field_object;
+				teamname.prefix = player_object.Prefix;
+				teamname.displayname = player_object.DisplayName;
+				SendLog.debug("Player(in ConfigFile) prefix and displayname!");
+			}
 		}
+		// try {
+		// for (TeamName teamname : TeamName.values()) {
+		// SendLog.debug("TeamName: " + teamname.toString());
+		// Field field_class = this.getClass().getField(teamname.toString());
+		// SendLog.debug("ClassName: " + field_class.getName());
+		// for (Field field_class_field : field_class.getClass().getFields()) {
+		// SendLog.debug("ClassField: " + field_class_field.getName());
+		// if (Modifier.isFinal(field_class_field.getModifiers())) {
+		// SendLog.debug("is final!");
+		// continue;
+		// } else {
+		// SendLog.debug("not final!");
+		// teamname.getClass().getField(field_class_field.getName()).set(this,
+		// field_class_field.get(field_class));
+		// }
+		// }
+		// }
+		// } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+		// ex.printStackTrace();
+		// }
 		// for (TeamName teamname : TeamName.values()) {
 		// Field field_class = this.getClass().getField(teamname.toString());
 		// SendLog.debug("ClassName: " + field_class.getName());
